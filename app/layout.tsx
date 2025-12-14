@@ -19,7 +19,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const popups = await getActivePopups();
+  const popups = (await getActivePopups()) || [];
 
   return (
     <html lang="en">

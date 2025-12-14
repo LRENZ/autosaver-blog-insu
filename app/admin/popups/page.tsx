@@ -3,7 +3,7 @@ import { Plus, Edit, Trash2, Eye, EyeOff } from 'lucide-react'
 import { getAllPopups, deletePopup, togglePopupStatus } from '@/lib/popup-actions'
 
 export default async function PopupsPage() {
-  const popups = await getAllPopups()
+  const popups = (await getAllPopups()) || []
 
   return (
     <div className="space-y-6">

@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { getDb } from './db-adapter'
+import { getDB } from './db-adapter'
 
 export interface Popup {
   id: string
@@ -21,7 +21,7 @@ export interface Popup {
 
 // Get all active popups
 export async function getActivePopups(): Promise<Popup[]> {
-  const db = getDb()
+  const db = getDB()
   const popups = db.prepare(`
     SELECT id, name, title, content, image_url as imageUrl, 
            cta_text as ctaText, cta_url as ctaUrl,
@@ -38,7 +38,7 @@ export async function getActivePopups(): Promise<Popup[]> {
 
 // Get all popups (for admin)
 export async function getAllPopups(): Promise<Popup[]> {
-  const db = getDb()
+  const db = getDB()
   const popups = db.prepare(`
     SELECT id, name, title, content, image_url as imageUrl, 
            cta_text as ctaText, cta_url as ctaUrl,
@@ -54,7 +54,7 @@ export async function getAllPopups(): Promise<Popup[]> {
 
 // Get popup by ID
 export async function getPopupById(id: string): Promise<Popup | null> {
-  const db = getDb()
+  const db = getDB()
   const popup = db.prepare(`
     SELECT id, name, title, content, image_url as imageUrl, 
            cta_text as ctaText, cta_url as ctaUrl,
@@ -70,7 +70,7 @@ export async function getPopupById(id: string): Promise<Popup | null> {
 
 // Create popup
 export async function createPopup(data: Omit<Popup, 'id' | 'createdAt' | 'updatedAt'>) {
-  const db = getDb()
+  const db = getDB()
   const id = `popup_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   const now = new Date().toISOString()
 
@@ -103,7 +103,7 @@ export async function createPopup(data: Omit<Popup, 'id' | 'createdAt' | 'update
 
 // Update popup
 export async function updatePopup(id: string, data: Partial<Omit<Popup, 'id' | 'createdAt' | 'updatedAt'>>) {
-  const db = getDb()
+  const db = getDB()
   const now = new Date().toISOString()
 
   const fields: string[] = []
@@ -167,7 +167,7 @@ export async function updatePopup(id: string, data: Partial<Omit<Popup, 'id' | '
 
 // Delete popup
 export async function deletePopup(id: string) {
-  const db = getDb()
+  const db = getDB()
   db.prepare('DELETE FROM popups WHERE id = ?').run(id)
 
   revalidatePath('/')
@@ -177,7 +177,7 @@ export async function deletePopup(id: string) {
 
 // Toggle popup status
 export async function togglePopupStatus(id: string) {
-  const db = getDb()
+  const db = getDB()
   const popup = await getPopupById(id)
   if (!popup) return { success: false, error: 'Popup not found' }
 

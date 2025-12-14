@@ -1,6 +1,6 @@
 'use server'
 
-import { getDb } from './db-adapter'
+import { getDB } from './db-adapter'
 
 export interface LocationBlog {
   id: string
@@ -19,7 +19,7 @@ export interface LocationBlog {
 
 // Get all published location blogs
 export async function getLocationBlogs(): Promise<LocationBlog[]> {
-  const db = getDb()
+  const db = getDB()
   const blogs = db.prepare(`
     SELECT 
       id, 
@@ -44,7 +44,7 @@ export async function getLocationBlogs(): Promise<LocationBlog[]> {
 
 // Get location blog by slug
 export async function getLocationBlogBySlug(slug: string): Promise<LocationBlog | null> {
-  const db = getDb()
+  const db = getDB()
   const blog = db.prepare(`
     SELECT 
       id, 
@@ -68,7 +68,7 @@ export async function getLocationBlogBySlug(slug: string): Promise<LocationBlog 
 
 // Get location blog by ID
 export async function getLocationBlogById(id: string): Promise<LocationBlog | null> {
-  const db = getDb()
+  const db = getDB()
   const blog = db.prepare(`
     SELECT 
       id, 
@@ -92,7 +92,7 @@ export async function getLocationBlogById(id: string): Promise<LocationBlog | nu
 
 // Create location blog
 export async function createLocationBlog(data: Omit<LocationBlog, 'id' | 'createdAt' | 'updatedAt'>) {
-  const db = getDb()
+  const db = getDB()
   const id = `loc_blog_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   const now = new Date().toISOString()
 
@@ -121,7 +121,7 @@ export async function createLocationBlog(data: Omit<LocationBlog, 'id' | 'create
 
 // Update location blog
 export async function updateLocationBlog(id: string, data: Partial<Omit<LocationBlog, 'id' | 'createdAt' | 'updatedAt'>>) {
-  const db = getDb()
+  const db = getDB()
   const now = new Date().toISOString()
 
   const fields: string[] = []
@@ -179,7 +179,7 @@ export async function updateLocationBlog(id: string, data: Partial<Omit<Location
 
 // Delete location blog
 export async function deleteLocationBlog(id: string) {
-  const db = getDb()
+  const db = getDB()
   db.prepare('DELETE FROM location_blogs WHERE id = ?').run(id)
   return { success: true }
 }
