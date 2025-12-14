@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation'
 import PopupForm from '@/components/admin/PopupForm'
 import { getPopupById } from '@/lib/popup-actions'
+import { requireAuth } from '@/lib/server-auth'
 
 export default async function EditPopupPage({ params }: { params: { id: string } }) {
+  await requireAuth()
   const popup = await getPopupById(params.id)
 
   if (!popup) {

@@ -1,6 +1,8 @@
 import PopupForm from '@/components/admin/PopupForm'
+import { requireAuth } from '@/lib/server-auth'
 
-export default function CreatePopupPage() {
+export default async function CreatePopupPage() {
+  await requireAuth()
   return (
     <div className="space-y-6">
       <div>

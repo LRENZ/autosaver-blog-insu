@@ -175,7 +175,7 @@ export default function PopupForm({ popup }: PopupFormProps) {
             Trigger Value
           </label>
           <input
-            type="text"
+            type="number"
             id="triggerValue"
             value={formData.triggerValue}
             onChange={(e) => setFormData({ ...formData, triggerValue: e.target.value })}
@@ -187,7 +187,16 @@ export default function PopupForm({ popup }: PopupFormProps) {
                 ? 'Percentage (e.g., 50)'
                 : 'N/A'
             }
+            min="0"
+            max={formData.triggerType === 'scroll' ? 100 : 3600}
           />
+          <p className="mt-1 text-xs text-gray-500">
+            {formData.triggerType === 'time' || formData.triggerType === 'onload'
+              ? '⏱️ Enter seconds (e.g., 5 = 5 seconds)'
+              : formData.triggerType === 'scroll'
+              ? '📊 Enter percentage (0-100)'
+              : 'Trigger value for this type'}
+          </p>
         </div>
       </div>
 
