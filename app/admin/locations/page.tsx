@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import { PlusCircle, Edit, Trash2 } from 'lucide-react';
 import { getAllLocations } from '@/lib/location-actions';
+import { requireAuth } from '@/lib/server-auth';
 import Button from '@/components/Button';
 import DeleteLocationButton from '@/components/DeleteLocationButton';
 
 export default async function AdminLocationsPage() {
+  await requireAuth();
   const locations = await getAllLocations();
 
   return (

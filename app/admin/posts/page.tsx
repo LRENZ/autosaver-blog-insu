@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import { PlusCircle, Edit, Trash2 } from 'lucide-react';
 import { getAllPosts } from '@/lib/actions';
+import { requireAuth } from '@/lib/server-auth';
 import Button from '@/components/Button';
 import DeletePostButton from '@/components/DeletePostButton';
 
 export default async function AdminPostsPage() {
+  await requireAuth();
   const posts = await getAllPosts();
 
   return (

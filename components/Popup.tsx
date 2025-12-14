@@ -31,13 +31,22 @@ export default function Popup({
   const [shouldShow, setShouldShow] = useState(false)
 
   useEffect(() => {
+    console.log('[Popup] Initializing popup:', { id, title, triggerType, triggerValue, displayPages });
+    
     // Check if popup was already shown in this session
     const shown = sessionStorage.getItem(`popup_${id}_shown`)
-    if (shown) return
+    if (shown) {
+      console.log('[Popup] Already shown in this session, skipping:', id);
+      return;
+    }
 
     // Check if current page matches display rules
     const currentPath = window.location.pathname
+    console.log('[Popup] Current path:', currentPath);
+    
     const pages = displayPages.split(',').map(p => p.trim())
+    console.log('[Popup] Display pages config:', pages);
+    
     const shouldDisplay = pages.includes('all') || pages.some(page => {
       if (page === 'home' && currentPath === '/') return true
       if (page === 'blog' && currentPath.startsWith('/blog')) return true
@@ -45,26 +54,44 @@ export default function Popup({
       return currentPath === page
     })
 
-    if (!shouldDisplay) return
+    console.log('[Popup] Should display:', shouldDisplay);
+    
+    if (!shouldDisplay) {
+      console.log('[Popup] Page does not match display rules, skipping:', id);
+      return;
+    }
+    
     setShouldShow(true)
+    console.log('[Popup] Setting shouldShow to true');
 
     // Handle different trigger types
     switch (triggerType) {
       case 'onload':
         const delay = triggerValue || 0
-        setTimeout(() => setIsOpen(true), delay * 1000)
+        console.log('[Popup] Onload trigger, delay:', delay, 'seconds');
+        setTimeout(() => {
+          console.log('[Popup] Opening popup (onload):', id);
+          setIsOpen(true);
+        }, delay * 1000)
         break
 
       case 'time':
         const timeDelay = triggerValue || 5
-        setTimeout(() => setIsOpen(true), timeDelay * 1000)
+        console.log('[Popup] Time trigger, delay:', timeDelay, 'seconds');
+        setTimeout(() => {
+          console.log('[Popup] Opening popup (time):', id);
+          setIsOpen(true);
+        }, timeDelay * 1000)
         break
 
       case 'scroll':
+        console.log('[Popup] Scroll trigger, threshold:', triggerValue || 50, '%');
         const handleScroll = () => {
           const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
           const threshold = triggerValue || 50
+          console.log('[Popup] Scroll progress:', scrollPercent.toFixed(2), '% / threshold:', threshold, '%');
           if (scrollPercent >= threshold) {
+            console.log('[Popup] Opening popup (scroll):', id);
             setIsOpen(true)
             window.removeEventListener('scroll', handleScroll)
           }
@@ -73,8 +100,10 @@ export default function Popup({
         return () => window.removeEventListener('scroll', handleScroll)
 
       case 'exit':
+        console.log('[Popup] Exit intent trigger');
         const handleExit = (e: MouseEvent) => {
           if (e.clientY <= 0) {
+            console.log('[Popup] Opening popup (exit intent):', id);
             setIsOpen(true)
             document.removeEventListener('mouseleave', handleExit)
           }
@@ -82,7 +111,7 @@ export default function Popup({
         document.addEventListener('mouseleave', handleExit)
         return () => document.removeEventListener('mouseleave', handleExit)
     }
-  }, [id, triggerType, triggerValue, displayPages])
+  }, [id, title, triggerType, triggerValue, displayPages])
 
   const handleClose = () => {
     setIsOpen(false)

@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import { Plus, Edit, Trash2, Eye, EyeOff } from 'lucide-react'
 import { getAllPopups, deletePopup, togglePopupStatus } from '@/lib/popup-actions'
+import { requireAuth } from '@/lib/server-auth'
 
 export default async function PopupsPage() {
+  await requireAuth();
   const popups = (await getAllPopups()) || []
 
   return (

@@ -23,10 +23,17 @@ export default function PopupProvider({ popups }: PopupProviderProps) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    console.log('[PopupProvider] Mounting, received popups:', popups);
+    console.log('[PopupProvider] Number of popups:', popups.length);
     setMounted(true)
-  }, [])
+  }, [popups])
 
-  if (!mounted) return null
+  if (!mounted) {
+    console.log('[PopupProvider] Not mounted yet, waiting...');
+    return null;
+  }
+
+  console.log('[PopupProvider] Rendering', popups.length, 'popups');
 
   return (
     <>

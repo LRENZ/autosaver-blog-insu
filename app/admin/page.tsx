@@ -1,9 +1,13 @@
 import Link from 'next/link';
 import { FileText, Eye, PlusCircle, TrendingUp } from 'lucide-react';
 import { getAllPosts } from '@/lib/actions';
+import { requireAuth } from '@/lib/server-auth';
 import Button from '@/components/Button';
 
 export default async function AdminDashboard() {
+  // Server-side authentication check
+  await requireAuth();
+  
   const posts = await getAllPosts();
   const publishedPosts = posts.filter(p => p.status === 'published');
   const draftPosts = posts.filter(p => p.status === 'draft');

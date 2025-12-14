@@ -80,15 +80,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       {/* Article Content */}
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         {/* Meta Info */}
-        <div className="flex flex-wrap items-center gap-4 mb-6 text-sm text-gray-600">
+        <div className="flex flex-wrap items-center gap-4 mb-8 text-sm text-gray-600">
           <div className="flex items-center space-x-2">
             <Tag className="w-4 h-4 text-orange-600" />
-            <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-medium">
+            <span className="bg-gradient-to-r from-orange-100 to-orange-50 text-orange-700 px-4 py-1.5 rounded-full font-semibold shadow-sm">
               {post.category}
             </span>
           </div>
-          <div className="flex items-center space-x-2">
-            <Calendar className="w-4 h-4" />
+          <div className="flex items-center space-x-2 bg-gray-50 px-4 py-1.5 rounded-full">
+            <Calendar className="w-4 h-4 text-gray-500" />
             <span>
               {post.createdAt.toLocaleDateString('en-US', {
                 year: 'numeric',
@@ -100,27 +100,75 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
 
         {/* Title */}
-        <h1 className="text-5xl font-bold text-gray-900 mb-6 leading-tight">
+        <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-8 leading-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
           {post.title}
         </h1>
 
         {/* Excerpt */}
-        <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-          {post.excerpt}
-        </p>
+        <div className="p-6 bg-gradient-to-br from-blue-50 to-orange-50 rounded-2xl border-l-4 border-orange-500 mb-10 shadow-sm">
+          <p className="text-xl text-gray-700 leading-relaxed font-medium">
+            {post.excerpt}
+          </p>
+        </div>
 
-        {/* Body Content */}
-        <MarkdownRenderer content={post.body} />
+        {/* Body Content with enhanced styling */}
+        <div className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-h2:text-3xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-2xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-4 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6 prose-li:text-gray-700 prose-strong:text-gray-900 prose-strong:font-semibold prose-a:text-orange-600 prose-a:no-underline hover:prose-a:text-orange-700 hover:prose-a:underline prose-code:text-orange-600 prose-code:bg-orange-50 prose-code:px-2 prose-code:py-0.5 prose-code:rounded prose-blockquote:border-l-4 prose-blockquote:border-orange-500 prose-blockquote:bg-orange-50 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-lg">
+          <MarkdownRenderer content={post.body} />
+        </div>
 
         {/* CTA Section */}
-        <div className="mt-12 p-8 bg-gradient-to-r from-orange-50 to-blue-50 rounded-2xl border-2 border-orange-200">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">
-            Ready to Save on Car Insurance?
-          </h3>
-          <p className="text-gray-600 mb-6">
-            Compare quotes from top providers and save up to $500 per year.
-          </p>
-          <Button size="lg">Get Your Free Quote</Button>
+        <div className="mt-16 relative overflow-hidden">
+          {/* Decorative background elements */}
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 opacity-10 rounded-3xl"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-orange-300 opacity-20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-300 opacity-20 rounded-full blur-3xl"></div>
+          
+          <div className="relative p-10 bg-gradient-to-br from-orange-50 via-white to-blue-50 rounded-3xl border-2 border-orange-200 shadow-xl">
+            <div className="flex items-center mb-4">
+              <div className="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center mr-4">
+                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <h3 className="text-3xl font-bold text-gray-900">
+                Ready to Save on Car Insurance?
+              </h3>
+            </div>
+            <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+              Compare quotes from top providers in minutes and save up to <span className="font-bold text-orange-600">$500 per year</span>. 
+              No phone calls, no hidden fees—just honest comparisons.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button size="lg" className="flex-1 sm:flex-initial shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
+                Get Your Free Quote →
+              </Button>
+              <Link href="/">
+                <Button size="lg" variant="secondary" className="w-full sm:w-auto">
+                  Learn More
+                </Button>
+              </Link>
+            </div>
+            <div className="mt-6 flex items-center space-x-4 text-sm text-gray-600">
+              <div className="flex items-center">
+                <svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>2-3 minutes</span>
+              </div>
+              <div className="flex items-center">
+                <svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>No commitment</span>
+              </div>
+              <div className="flex items-center">
+                <svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>100% Free</span>
+              </div>
+            </div>
+          </div>
         </div>
       </article>
     </div>

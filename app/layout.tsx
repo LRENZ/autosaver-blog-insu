@@ -20,6 +20,17 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const popups = (await getActivePopups()) || [];
+  
+  // Server-side log
+  console.log('[RootLayout] Fetched popups from database:', popups.length, 'active popups');
+  if (popups.length > 0) {
+    console.log('[RootLayout] Popup details:', popups.map(p => ({ 
+      id: p.id, 
+      name: p.name, 
+      triggerType: p.triggerType,
+      displayPages: p.displayPages 
+    })));
+  }
 
   return (
     <html lang="en">
