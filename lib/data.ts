@@ -1,4 +1,5 @@
 import { Post, Location } from './types';
+import { getDB } from './db-adapter';
 
 // Mock data as fallback (used during build)
 const mockPosts: Post[] = [
@@ -28,24 +29,6 @@ const mockLocations: Location[] = [
     averageRate: '$1,868/year',
   },
 ];
-
-// Helper to get database
-function getDB(): D1Database | null {
-  // Try to get D1 from various sources
-  if (typeof process !== 'undefined') {
-    // From process.env (wrangler dev)
-    if ((process as any).env?.DB) {
-      return (process as any).env.DB;
-    }
-  }
-  
-  // From global (Cloudflare Workers runtime)
-  if (typeof globalThis !== 'undefined' && (globalThis as any).DB) {
-    return (globalThis as any).DB;
-  }
-  
-  return null;
-}
 
 // Helper to convert database row to Post object
 function rowToPost(row: any): Post {

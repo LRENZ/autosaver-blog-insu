@@ -1,18 +1,6 @@
 import Link from 'next/link';
 import { Car } from 'lucide-react';
 
-const states = [
-  'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado',
-  'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho',
-  'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-  'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
-  'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
-  'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma',
-  'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
-  'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington',
-  'West Virginia', 'Wisconsin', 'Wyoming'
-];
-
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300 mt-20">
@@ -75,22 +63,6 @@ export default function Footer() {
             <p className="text-sm text-gray-400">
               Have questions? We're here to help you find the best insurance rates.
             </p>
-          </div>
-        </div>
-
-        {/* States Grid */}
-        <div className="border-t border-gray-800 pt-8 mb-8">
-          <h3 className="font-semibold text-white mb-4">Find Insurance by State</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-3">
-            {states.map((state) => (
-              <Link
-                key={state}
-                href={`/location/${state.toLowerCase().replace(/\s+/g, '-')}`}
-                className="text-sm hover:text-orange-600 transition"
-              >
-                {state}
-              </Link>
-            ))}
           </div>
         </div>
 

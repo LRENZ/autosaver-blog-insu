@@ -2,21 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { Post } from './types';
-
-// Helper to get database
-function getDB(): D1Database | null {
-  if (typeof process !== 'undefined') {
-    if ((process as any).env?.DB) {
-      return (process as any).env.DB;
-    }
-  }
-  
-  if (typeof globalThis !== 'undefined' && (globalThis as any).DB) {
-    return (globalThis as any).DB;
-  }
-  
-  return null;
-}
+import { getDB } from './db-adapter';
 
 // Helper to generate slug from title
 function generateSlug(title: string): string {
