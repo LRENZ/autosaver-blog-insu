@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { Calendar, Tag, ArrowLeft } from 'lucide-react';
 import { getPostBySlug, getPosts } from '@/lib/data';
 import Button from '@/components/Button';
+import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -109,11 +110,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </p>
 
         {/* Body Content */}
-        <div className="prose prose-lg max-w-none">
-          <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-            {post.body}
-          </div>
-        </div>
+        <MarkdownRenderer content={post.body} />
 
         {/* CTA Section */}
         <div className="mt-12 p-8 bg-gradient-to-r from-orange-50 to-blue-50 rounded-2xl border-2 border-orange-200">

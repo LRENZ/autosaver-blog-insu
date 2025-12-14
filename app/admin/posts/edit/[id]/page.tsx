@@ -9,6 +9,7 @@ import { getPostById, updatePost } from '@/lib/actions';
 import Input from '@/components/Input';
 import Textarea from '@/components/Textarea';
 import Button from '@/components/Button';
+import MarkdownEditor from '@/components/MarkdownEditor';
 
 interface EditPostPageProps {
   params: Promise<{
@@ -186,13 +187,13 @@ export default function EditPostPage({ params }: EditPostPageProps) {
             required
           />
 
-          {/* Body Content */}
-          <Textarea
-            label="Body Content *"
+          {/* Body Content - Markdown Editor */}
+          <MarkdownEditor
+            label="Body Content (Markdown)"
             value={formData.body}
-            onChange={(e) => setFormData(prev => ({ ...prev, body: e.target.value }))}
-            placeholder="Write your article content here..."
-            rows={15}
+            onChange={(value) => setFormData(prev => ({ ...prev, body: value }))}
+            placeholder="Write your article content in Markdown..."
+            rows={20}
             required
           />
 

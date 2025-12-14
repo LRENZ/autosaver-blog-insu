@@ -6,20 +6,27 @@ A high-performance **Car Insurance Blog** with a public-facing website and a **s
 
 ### Public Website
 - **SEO-Optimized Homepage** with hero section, blog grid, and location listings
-- **Dynamic Blog Posts** with category filtering (Savings, Guides, Location)
-- **State-Specific Landing Pages** for targeted insurance information
+- **Dynamic Blog Posts** with category filtering (Savings, Guides, Location) - **9 Published Articles**
+- **State-Specific Landing Pages** for targeted insurance information - **3 Complete Guides**
 - **Responsive Design** using Tailwind CSS
 - **Legal Pages** (Privacy Policy, Terms of Use)
 - **Conversion-Focused UI** with clear CTAs
+- **🆕 Popup Marketing System** - Conversion-optimized promotional popups
 
 ### Admin Dashboard
 - **Complete CMS** for managing blog articles
 - **CRUD Operations** using Next.js Server Actions with D1 Database
 - **Post Management** with status tracking (Published/Draft)
+- **🆕 Popup Management** - Create and manage promotional popups with triggers
 - **Rich Editor Interface** with SEO meta fields
 - **Clean, Utilitarian Design** optimized for content management
 - **Sidebar Navigation** for easy admin access
-- **Real-time Database** with 6 pre-seeded articles
+- **Real-time Database** with comprehensive seed data
+
+### Security
+- **🆕 Cloudflare Zero Trust Ready** - Enterprise-grade authentication for admin panel
+- **Protected Admin Routes** - `/admin/*` path protection
+- **Multiple Auth Options** - Google OAuth, GitHub, Email OTP
 
 ## 🛠️ Tech Stack
 
