@@ -102,8 +102,11 @@ export async function createPopup(data: any) {
 
     await db.createPopup(newPopup);
     
-    revalidatePath('/');
+    // Revalidate all pages to clear cache
+    revalidatePath('/', 'layout');
     revalidatePath('/admin/popups');
+    
+    console.log('[createPopup] Cache invalidated for all pages');
     
     return { success: true };
   } catch (error: any) {
@@ -134,8 +137,11 @@ export async function updatePopup(id: string, data: any) {
 
     await db.updatePopup(id, updatedPopup);
     
-    revalidatePath('/');
+    // Revalidate all pages to clear cache
+    revalidatePath('/', 'layout'); // This clears ALL pages under root layout
     revalidatePath('/admin/popups');
+    
+    console.log('[updatePopup] Cache invalidated for all pages');
     
     return { success: true };
   } catch (error: any) {
@@ -157,8 +163,11 @@ export async function togglePopupStatus(id: string, currentStatus: string) {
       updated_at: new Date().toISOString(),
     });
     
-    revalidatePath('/');
+    // Revalidate all pages to clear cache
+    revalidatePath('/', 'layout');
     revalidatePath('/admin/popups');
+    
+    console.log('[togglePopupStatus] Cache invalidated for all pages');
     
     return { success: true };
   } catch (error: any) {
@@ -175,8 +184,11 @@ export async function deletePopup(id: string) {
   try {
     await db.deletePopup(id);
     
-    revalidatePath('/');
+    // Revalidate all pages to clear cache
+    revalidatePath('/', 'layout');
     revalidatePath('/admin/popups');
+    
+    console.log('[deletePopup] Cache invalidated for all pages');
     
     return { success: true };
   } catch (error: any) {

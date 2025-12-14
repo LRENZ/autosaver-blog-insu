@@ -145,6 +145,12 @@ export default function Popup({
               alt={title}
               fill
               className="object-cover"
+              unoptimized={imageUrl.includes('blob.vercel-storage.com')}
+              onError={(e) => {
+                console.error('[Popup] Image load error:', imageUrl);
+                // Hide image on error
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
             />
           </div>
         )}

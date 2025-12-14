@@ -39,9 +39,12 @@ export async function createPost(formData: FormData) {
 
     await db.createPost(newPost);
     
-    revalidatePath('/');
+    // Revalidate all pages to clear cache
+    revalidatePath('/', 'layout');
     revalidatePath('/blog');
     revalidatePath('/admin/posts');
+    
+    console.log('[createPost] Cache invalidated for all pages');
     
     return { success: true };
   } catch (error: any) {
@@ -131,10 +134,13 @@ export async function updatePost(id: string, formData: FormData) {
 
     await db.updatePost(Number(id), updatedPost);
     
-    revalidatePath('/');
+    // Revalidate all pages to clear cache
+    revalidatePath('/', 'layout');
     revalidatePath('/blog');
     revalidatePath(`/blog/${slug}`);
     revalidatePath('/admin/posts');
+    
+    console.log('[updatePost] Cache invalidated for all pages');
     
     return { success: true };
   } catch (error: any) {
@@ -151,9 +157,12 @@ export async function deletePost(id: string) {
   try {
     await db.deletePost(Number(id));
     
-    revalidatePath('/');
+    // Revalidate all pages to clear cache
+    revalidatePath('/', 'layout');
     revalidatePath('/blog');
     revalidatePath('/admin/posts');
+    
+    console.log('[deletePost] Cache invalidated for all pages');
     
     return { success: true };
   } catch (error: any) {
