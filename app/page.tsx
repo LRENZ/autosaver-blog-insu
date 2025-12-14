@@ -40,12 +40,16 @@ export default async function HomePage() {
 
               {/* CTA */}
               <div className="flex space-x-4">
-                <Button size="lg" className="text-lg" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                  Get My Free Quote
-                </Button>
-                <Button variant="ghost" size="lg" className="text-lg">
-                  Learn More
-                </Button>
+                <Link href="#quote">
+                  <Button size="lg" className="text-lg">
+                    Get My Free Quote
+                  </Button>
+                </Link>
+                <Link href="#guides">
+                  <Button variant="ghost" size="lg" className="text-lg">
+                    Learn More
+                  </Button>
+                </Link>
               </div>
 
               {/* Trust Indicators */}
