@@ -21,6 +21,7 @@ export async function getAllPopups(): Promise<Popup[]> {
       displayPages: row.display_pages,
       includePages: row.include_pages || '',
       excludePages: row.exclude_pages || '',
+      displayFrequency: row.display_frequency || 'once-per-session',
       status: row.status as 'active' | 'inactive',
       createdAt: new Date(row.created_at),
       updatedAt: new Date(row.updated_at),
@@ -51,6 +52,7 @@ export async function getPopupById(id: string): Promise<Popup | null> {
       displayPages: row.display_pages,
       includePages: row.include_pages || '',
       excludePages: row.exclude_pages || '',
+      displayFrequency: row.display_frequency || 'once-per-session',
       status: row.status as 'active' | 'inactive',
       createdAt: new Date(row.created_at),
       updatedAt: new Date(row.updated_at),
@@ -78,6 +80,7 @@ export async function getActivePopups(): Promise<Popup[]> {
       displayPages: row.display_pages,
       includePages: row.include_pages || '',
       excludePages: row.exclude_pages || '',
+      displayFrequency: row.display_frequency || 'once-per-session',
       status: row.status as 'active' | 'inactive',
       createdAt: new Date(row.created_at),
       updatedAt: new Date(row.updated_at),
@@ -105,6 +108,7 @@ export async function createPopup(data: any) {
       display_pages: data.displayPages,
       include_pages: data.includePages || null,
       exclude_pages: data.excludePages || null,
+      display_frequency: data.displayFrequency || 'once-per-session',
       status: data.status,
     };
 
@@ -141,6 +145,7 @@ export async function updatePopup(id: string, data: any) {
       display_pages: data.displayPages,
       include_pages: data.includePages || null,
       exclude_pages: data.excludePages || null,
+      display_frequency: data.displayFrequency || 'once-per-session',
       status: data.status,
       updated_at: new Date().toISOString(),
     };

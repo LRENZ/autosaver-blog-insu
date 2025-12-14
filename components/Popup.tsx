@@ -16,6 +16,7 @@ interface PopupProps {
   displayPages: string
   includePages?: string
   excludePages?: string
+  displayFrequency?: 'once-per-session' | 'every-page' | 'once-per-day' | 'always'
 }
 
 export default function Popup({
@@ -29,18 +30,63 @@ export default function Popup({
   triggerValue,
   displayPages,
   includePages,
-  excludePages
+  excludePages,
+  displayFrequency = 'once-per-session'
 }: PopupProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [shouldShow, setShouldShow] = useState(false)
 
   useEffect(() => {
-    console.log('[Popup] Initializing popup:', { id, title, triggerType, triggerValue, displayPages });
+    console.log('[Popup] Initializing popup:', { id, title, triggerType, triggerValue, displayPages, displayFrequency });
     
-    // Check if popup was already shown in this session
-    const shown = sessionStorage.getItem(`popup_${id}_shown`)
-    if (shown) {
-      console.log('[Popup] Already shown in this session, skipping:', id);
+    // Check display frequency
+    const checkDisplayFrequency = () => {
+      switch (displayFrequency) {
+        case 'once-per-session':
+          // Check sessionStorage (default behavior)
+          const sessionShown = sessionStorage.getItem(`popup_${id}_shown`)
+          if (sessionShown) {
+            console.log('[Popup] Already shown this session (once-per-session), skipping:', id);
+            return false;
+          }
+          break;
+          
+        case 'once-per-day':
+          // Check localStorage with timestamp
+          const lastShown = localStorage.getItem(`popup_${id}_last_shown`)
+          if (lastShown) {
+            const lastShownTime = parseInt(lastShown, 10)
+            const oneDayMs = 24 * 60 * 60 * 1000
+            const now = Date.now()
+            if (now - lastShownTime < oneDayMs) {
+              console.log('[Popup] Already shown today (once-per-day), skipping:', id);
+              return false;
+            }
+          }
+          break;
+          
+        case 'every-page':
+          // Show on every page load, no storage check
+          console.log('[Popup] Display frequency: every-page, will show');
+          break;
+          
+        case 'always':
+          // Always show, no storage check
+          console.log('[Popup] Display frequency: always, will show');
+          break;
+          
+        default:
+          // Fallback to once-per-session
+          const defaultShown = sessionStorage.getItem(`popup_${id}_shown`)
+          if (defaultShown) {
+            console.log('[Popup] Already shown this session (default), skipping:', id);
+            return false;
+          }
+      }
+      return true;
+    }
+    
+    if (!checkDisplayFrequency()) {
       return;
     }
 
@@ -161,15 +207,44 @@ export default function Popup({
         document.addEventListener('mouseleave', handleExit)
         return () => document.removeEventListener('mouseleave', handleExit)
     }
-  }, [id, title, triggerType, triggerValue, displayPages])
+  }, [id, title, triggerType, triggerValue, displayPages, displayFrequency, includePages, excludePages])
+
+  const markAsShown = () => {
+    // Mark popup as shown based on display frequency
+    switch (displayFrequency) {
+      case 'once-per-session':
+        sessionStorage.setItem(`popup_${id}_shown`, 'true')
+        console.log('[Popup] Marked as shown in sessionStorage (once-per-session)');
+        break;
+        
+      case 'once-per-day':
+        localStorage.setItem(`popup_${id}_last_shown`, Date.now().toString())
+        console.log('[Popup] Marked as shown in localStorage (once-per-day)');
+        break;
+        
+      case 'every-page':
+        // Don't store anything, show on every page load
+        console.log('[Popup] Not marking as shown (every-page)');
+        break;
+        
+      case 'always':
+        // Don't store anything, always show
+        console.log('[Popup] Not marking as shown (always)');
+        break;
+        
+      default:
+        // Default to session storage
+        sessionStorage.setItem(`popup_${id}_shown`, 'true')
+    }
+  }
 
   const handleClose = () => {
     setIsOpen(false)
-    sessionStorage.setItem(`popup_${id}_shown`, 'true')
+    markAsShown()
   }
 
   const handleCTA = () => {
-    sessionStorage.setItem(`popup_${id}_shown`, 'true')
+    markAsShown()
     window.location.href = ctaUrl
   }
 

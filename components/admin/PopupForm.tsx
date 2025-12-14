@@ -26,6 +26,7 @@ export default function PopupForm({ popup }: PopupFormProps) {
     displayPages: popup?.displayPages || 'all',
     includePages: popup?.includePages || '',
     excludePages: popup?.excludePages || '',
+    displayFrequency: popup?.displayFrequency || 'once-per-session' as const,
     status: popup?.status || 'active' as const,
   })
 
@@ -265,6 +266,33 @@ export default function PopupForm({ popup }: PopupFormProps) {
           <code className="bg-gray-100 px-1 rounded ml-1">/checkout</code> (checkout page), 
           <code className="bg-gray-100 px-1 rounded ml-1">*</code> (nowhere)
         </p>
+      </div>
+
+      {/* Display Frequency */}
+      <div>
+        <label htmlFor="displayFrequency" className="block text-sm font-medium text-gray-700 mb-2">
+          🔄 Display Frequency *
+        </label>
+        <select
+          id="displayFrequency"
+          value={formData.displayFrequency}
+          onChange={(e) => setFormData({ ...formData, displayFrequency: e.target.value as any })}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+        >
+          <option value="once-per-session">Once Per Session (Default)</option>
+          <option value="every-page">Every Page Load</option>
+          <option value="once-per-day">Once Per Day</option>
+          <option value="always">Always (Testing Only)</option>
+        </select>
+        <p className="mt-1 text-sm text-gray-500">
+          Control how often users see this popup
+        </p>
+        <div className="mt-2 space-y-1 text-xs text-gray-400">
+          <p>• <strong>Once Per Session</strong>: Show once until browser closes (uses sessionStorage)</p>
+          <p>• <strong>Every Page Load</strong>: Show on every page navigation (no storage)</p>
+          <p>• <strong>Once Per Day</strong>: Show once every 24 hours (uses localStorage)</p>
+          <p>• <strong>Always</strong>: Show every time trigger fires (for testing)</p>
+        </div>
       </div>
 
       {/* Status */}

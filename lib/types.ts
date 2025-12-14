@@ -35,6 +35,7 @@ export interface Popup {
   displayPages: string; // Legacy: 'all', 'home', 'blog', 'location', or comma-separated paths
   includePages?: string; // New: comma-separated paths to include (e.g., '/, /blog, /location/california')
   excludePages?: string; // New: comma-separated paths to exclude (e.g., '/admin, /login')
+  displayFrequency?: 'once-per-session' | 'every-page' | 'once-per-day' | 'always'; // New: how often to show
   status: 'active' | 'inactive';
   createdAt: Date;
   updatedAt: Date;

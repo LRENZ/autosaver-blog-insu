@@ -15,6 +15,7 @@ interface PopupData {
   displayPages: string
   includePages?: string
   excludePages?: string
+  displayFrequency?: 'once-per-session' | 'every-page' | 'once-per-day' | 'always'
 }
 
 interface PopupProviderProps {
