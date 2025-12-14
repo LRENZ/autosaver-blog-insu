@@ -79,17 +79,30 @@ export function getDB(): any {
     return dbInstance;
   }
 
-  // Path to local D1 database created by wrangler
-  const dbPath = path.join(
-    process.cwd(),
-    '.wrangler/state/v3/d1/miniflare-D1DatabaseObject/8788c020b3deaef0f620db29eb016f892b2d4366158b1aff890bc056e577c5e0.sqlite'
-  );
+  // Try multiple paths for database
+  const possiblePaths = [
+    // Vercel/Production environment
+    path.join(process.cwd(), 'data/production.db'),
+    // Local wrangler development
+    path.join(
+      process.cwd(),
+      '.wrangler/state/v3/d1/miniflare-D1DatabaseObject/8788c020b3deaef0f620db29eb016f892b2d4366158b1aff890bc056e577c5e0.sqlite'
+    ),
+  ];
 
-  try {
-    dbInstance = new SQLiteAdapter(dbPath);
-    return dbInstance;
-  } catch (error) {
-    console.error('Failed to connect to database:', error);
-    return null;
+  for (const dbPath of possiblePaths) {
+    try {
+      const fs = require('fs');
+      if (fs.existsSync(dbPath)) {
+        dbInstance = new SQLiteAdapter(dbPath);
+        console.log('Database connected:', dbPath);
+        return dbInstance;
+      }
+    } catch (error) {
+      console.log('Failed to connect to', dbPath, error);
+    }
   }
+
+  console.error('Failed to connect to any database path');
+  return null;
 }

@@ -33,3 +33,20 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Cloudflare Wrangler
+.wrangler/
+
+# PM2
+.pm2/
+pids/
+logs/
+*.log
+
+# Backup files
+*.backup
+*.bak
+*.tar.gz
+
+# Database (comment out to include in deployment)
+# data/production.db
