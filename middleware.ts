@@ -1,31 +1,39 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-// This is a basic middleware structure for protecting admin routes
-// In production, you should implement proper authentication (e.g., using NextAuth.js, Clerk, or Auth0)
+function verifyAuthToken(token: string): boolean {
+  try {
+    // Verify the auth token
+    const decoded = Buffer.from(token, 'base64').toString('utf-8');
+    const [password] = decoded.split(':');
+    return password === 'creatorshouse1!';
+  } catch {
+    return false;
+  }
+}
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Check if the request is for admin routes
-  if (pathname.startsWith('/admin')) {
-    // TODO: Implement authentication check here
-    // For now, this is just a placeholder structure
+  // Check if the request is for admin routes (except login page)
+  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
+    // Check for authentication cookie
+    const authToken = request.cookies.get('admin_auth');
     
-    // Example: Check for authentication cookie/token
-    // const token = request.cookies.get('auth-token');
-    // const isAuthenticated = token && verifyToken(token.value);
-    
-    // For development, we'll allow access
-    // In production, you should implement proper authentication:
-    /*
-    const isAuthenticated = false; // Replace with actual auth check
-    
-    if (!isAuthenticated) {
+    if (!authToken || !verifyAuthToken(authToken.value)) {
       // Redirect to login page
-      return NextResponse.redirect(new URL('/login', request.url));
+      const loginUrl = new URL('/admin/login', request.url);
+      loginUrl.searchParams.set('redirect', pathname);
+      return NextResponse.redirect(loginUrl);
     }
-    */
+  }
+
+  // If accessing login page while already authenticated, redirect to dashboard
+  if (pathname === '/admin/login') {
+    const authToken = request.cookies.get('admin_auth');
+    if (authToken && verifyAuthToken(authToken.value)) {
+      return NextResponse.redirect(new URL('/admin', request.url));
+    }
   }
 
   return NextResponse.next();
@@ -34,9 +42,6 @@ export function middleware(request: NextRequest) {
 // Configure which routes this middleware should run on
 export const config = {
   matcher: [
-    /*
-     * Match all admin routes except static files and images
-     */
     '/admin/:path*',
   ],
 };

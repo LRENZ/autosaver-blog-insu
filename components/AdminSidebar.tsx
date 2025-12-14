@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { LayoutDashboard, FileText, Settings, PlusCircle, Home, Megaphone } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { LayoutDashboard, FileText, Settings, PlusCircle, Home, Megaphone, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navigation = [
@@ -15,6 +15,13 @@ const navigation = [
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    // Clear the auth cookie
+    document.cookie = 'admin_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    router.push('/admin/login');
+  };
 
   return (
     <aside className="w-64 bg-gray-900 text-white min-h-screen p-6 flex flex-col">
@@ -50,7 +57,7 @@ export default function AdminSidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-gray-800 pt-4">
+      <div className="border-t border-gray-800 pt-4 space-y-2">
         <Link
           href="/"
           className="flex items-center space-x-2 text-sm text-gray-400 hover:text-white transition"
@@ -58,6 +65,13 @@ export default function AdminSidebar() {
           <Home className="w-4 h-4" />
           <span>Back to Website</span>
         </Link>
+        <button
+          onClick={handleLogout}
+          className="flex items-center space-x-2 text-sm text-gray-400 hover:text-red-400 transition w-full"
+        >
+          <LogOut className="w-4 h-4" />
+          <span>Logout</span>
+        </button>
       </div>
     </aside>
   );

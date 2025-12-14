@@ -6,11 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:init": "tsx scripts/init-db.ts",
+    "db:seed": "tsx scripts/seed-db.ts",
+    "db:setup": "npm run db:init && npm run db:seed",
+    "supabase:setup": "tsx scripts/setup-supabase.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@supabase/supabase-js": "^2.87.1",
     "@types/better-sqlite3": "^7.6.13",
+    "@vercel/postgres": "^0.10.0",
     "better-sqlite3": "^12.5.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.561.0",
@@ -31,9 +37,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "vercel": "^50.0.1"
   }
