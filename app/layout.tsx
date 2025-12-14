@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PopupProvider from "@/components/PopupProvider";
+import { getActivePopups } from "@/lib/popup-actions";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,17 +14,20 @@ export const metadata: Metadata = {
   keywords: "car insurance, cheap car insurance, insurance quotes, compare insurance, auto insurance",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const popups = await getActivePopups();
+
   return (
     <html lang="en">
       <body className={inter.className}>
         <Header />
         <main>{children}</main>
         <Footer />
+        <PopupProvider popups={popups} />
       </body>
     </html>
   );
