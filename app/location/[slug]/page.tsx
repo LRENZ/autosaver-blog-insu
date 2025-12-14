@@ -31,11 +31,29 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
   }
 
   return {
-    title: `${location.name} Car Insurance - Best Rates & Quotes`,
-    description: `Find the best car insurance rates in ${location.name}. Compare quotes from top providers and save money. Average rate: ${location.averageRate}`,
+    title: `${location.name} Car Insurance - Best Rates & Quotes | Compare & Save`,
+    description: `Find the best car insurance rates in ${location.name}. Compare quotes from top providers and save money. Average rate: ${location.averageRate}. Get instant quotes today!`,
+    keywords: `${location.name} car insurance, car insurance ${location.state}, cheap car insurance ${location.name}, ${location.name} insurance quotes, auto insurance ${location.state}`,
     openGraph: {
+      type: 'website',
+      title: `${location.name} Car Insurance - Best Rates & Quotes`,
+      description: `Find the best car insurance rates in ${location.name}. Average rate: ${location.averageRate}`,
+      images: [
+        {
+          url: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1200&h=630&fit=crop',
+          width: 1200,
+          height: 630,
+          alt: `${location.name} Car Insurance`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
       title: `${location.name} Car Insurance Rates`,
-      description: location.description,
+      description: `Compare car insurance quotes in ${location.name}. Average: ${location.averageRate}`,
+    },
+    alternates: {
+      canonical: `https://autosaver-blog-insu.vercel.app/location/${slug}`,
     },
   };
 }
@@ -48,8 +66,36 @@ export default async function LocationPage({ params }: LocationPageProps) {
     notFound();
   }
 
+  // JSON-LD structured data for local business
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `Car Insurance in ${location.name}`,
+    description: location.description,
+    provider: {
+      '@type': 'Organization',
+      name: 'AutoSaver',
+      url: 'https://autosaver-blog-insu.vercel.app',
+    },
+    areaServed: {
+      '@type': 'State',
+      name: location.state,
+    },
+    offers: {
+      '@type': 'Offer',
+      price: location.averageRate,
+      priceCurrency: 'USD',
+      description: `Average car insurance rate in ${location.name}`,
+    },
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      {/* JSON-LD structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Back Button */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Link

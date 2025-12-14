@@ -9,9 +9,56 @@ import { getActivePopups } from "@/lib/popup-actions";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AutoSaver - Find Cheaper Car Insurance in Minutes",
-  description: "Compare car insurance quotes from top providers and save up to $500 per year. Free, fast, and secure comparison tool.",
-  keywords: "car insurance, cheap car insurance, insurance quotes, compare insurance, auto insurance",
+  metadataBase: new URL('https://autosaver-blog-insu.vercel.app'),
+  title: {
+    default: "AutoSaver - Find Cheaper Car Insurance in Minutes | Save up to $500",
+    template: "%s | AutoSaver"
+  },
+  description: "Compare car insurance quotes from top providers and save up to $500 per year. Free, fast, and secure comparison tool. Get instant quotes from 50+ insurers.",
+  keywords: ["car insurance", "cheap car insurance", "insurance quotes", "compare insurance", "auto insurance", "insurance savings", "car insurance comparison", "best car insurance rates"],
+  authors: [{ name: "AutoSaver" }],
+  creator: "AutoSaver",
+  publisher: "AutoSaver",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://autosaver-blog-insu.vercel.app',
+    title: 'AutoSaver - Find Cheaper Car Insurance in Minutes',
+    description: 'Compare car insurance quotes from top providers and save up to $500 per year. Free, fast, and secure.',
+    siteName: 'AutoSaver',
+    images: [
+      {
+        url: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=1200&h=630&fit=crop',
+        width: 1200,
+        height: 630,
+        alt: 'AutoSaver Car Insurance Comparison',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AutoSaver - Find Cheaper Car Insurance in Minutes',
+    description: 'Compare car insurance quotes and save up to $500 per year',
+    images: ['https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=1200&h=630&fit=crop'],
+  },
+  verification: {
+    google: 'your-google-verification-code',
+    // Add your verification codes
+  },
+  alternates: {
+    canonical: 'https://autosaver-blog-insu.vercel.app',
+  },
 };
 
 export default async function RootLayout({

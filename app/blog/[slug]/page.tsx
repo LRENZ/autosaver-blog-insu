@@ -35,10 +35,33 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   return {
     title: post.metaTitle || post.title,
     description: post.metaDescription || post.excerpt,
+    keywords: `car insurance, ${post.category}, insurance tips, ${post.title}`,
+    authors: [{ name: 'AutoSaver Team' }],
     openGraph: {
+      type: 'article',
+      title: post.metaTitle || post.title,
+      description: post.metaDescription || post.excerpt,
+      images: [
+        {
+          url: post.coverImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+      publishedTime: post.createdAt.toISOString(),
+      modifiedTime: post.updatedAt?.toISOString(),
+      authors: ['AutoSaver Team'],
+      section: post.category,
+    },
+    twitter: {
+      card: 'summary_large_image',
       title: post.metaTitle || post.title,
       description: post.metaDescription || post.excerpt,
       images: [post.coverImage],
+    },
+    alternates: {
+      canonical: `https://autosaver-blog-insu.vercel.app/blog/${slug}`,
     },
   };
 }
@@ -51,8 +74,41 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
+  // JSON-LD structured data for better SEO
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.excerpt,
+    image: post.coverImage,
+    datePublished: post.createdAt.toISOString(),
+    dateModified: post.updatedAt?.toISOString() || post.createdAt.toISOString(),
+    author: {
+      '@type': 'Organization',
+      name: 'AutoSaver',
+      url: 'https://autosaver-blog-insu.vercel.app',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'AutoSaver',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://autosaver-blog-insu.vercel.app/logo.png',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://autosaver-blog-insu.vercel.app/blog/${slug}`,
+    },
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      {/* JSON-LD structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Back Button */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Link

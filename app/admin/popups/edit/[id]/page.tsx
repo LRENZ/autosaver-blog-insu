@@ -3,9 +3,14 @@ import PopupForm from '@/components/admin/PopupForm'
 import { getPopupById } from '@/lib/popup-actions'
 import { requireAuth } from '@/lib/server-auth'
 
-export default async function EditPopupPage({ params }: { params: { id: string } }) {
+interface PageProps {
+  params: Promise<{ id: string }>
+}
+
+export default async function EditPopupPage({ params }: PageProps) {
   await requireAuth()
-  const popup = await getPopupById(params.id)
+  const { id } = await params
+  const popup = await getPopupById(id)
 
   if (!popup) {
     notFound()
