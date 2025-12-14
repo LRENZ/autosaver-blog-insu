@@ -23,9 +23,9 @@ export default function AdminLoginPage() {
         body: JSON.stringify({ username, password }),
       });
 
-      const data = await response.json();
+      const data = await response.json() as { token?: string; error?: string; success?: boolean };
 
-      if (response.ok) {
+      if (response.ok && data.token) {
         // Store auth token in cookie
         document.cookie = `admin_auth=${data.token}; path=/; max-age=86400`; // 24 hours
         router.push('/admin');
