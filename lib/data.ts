@@ -1,7 +1,7 @@
 import { Post, Location } from './types';
-import { getDB } from './db-adapter';
+import db from './db';
 
-// Mock data as fallback (used during build)
+// Mock data as fallback (used during build when DB is not available)
 const mockPosts: Post[] = [
   {
     id: '1',
@@ -33,7 +33,7 @@ const mockLocations: Location[] = [
 // Helper to convert database row to Post object
 function rowToPost(row: any): Post {
   return {
-    id: row.id,
+    id: String(row.id),
     title: row.title,
     slug: row.slug,
     category: row.category as 'Savings' | 'Guides' | 'Location',
@@ -51,7 +51,7 @@ function rowToPost(row: any): Post {
 // Helper to convert database row to Location object
 function rowToLocation(row: any): Location {
   return {
-    id: row.id,
+    id: String(row.id),
     name: row.name,
     slug: row.slug,
     state: row.state,
@@ -62,23 +62,10 @@ function rowToLocation(row: any): Location {
 
 // Get posts with optional limit
 export async function getPosts(limit?: number): Promise<Post[]> {
-  const db = getDB();
-  
-  if (!db) {
-    // Fallback to mock data during build
-    return limit ? mockPosts.slice(0, limit) : mockPosts;
-  }
-  
   try {
-    const query = limit
-      ? `SELECT * FROM posts WHERE status = 'published' ORDER BY created_at DESC LIMIT ?`
-      : `SELECT * FROM posts WHERE status = 'published' ORDER BY created_at DESC`;
-    
-    const result = limit
-      ? await db.prepare(query).bind(limit).all()
-      : await db.prepare(query).all();
-    
-    return result.results ? result.results.map(rowToPost) : [];
+    const posts = await db.getPosts();
+    const result = limit ? posts.slice(0, limit) : posts;
+    return result.map(rowToPost);
   } catch (error) {
     console.error('Error fetching posts:', error);
     return limit ? mockPosts.slice(0, limit) : mockPosts;
@@ -87,21 +74,10 @@ export async function getPosts(limit?: number): Promise<Post[]> {
 
 // Get single post by slug
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const db = getDB();
-  
-  if (!db) {
-    return mockPosts.find(p => p.slug === slug) || null;
-  }
-  
   try {
-    const result = await db
-      .prepare('SELECT * FROM posts WHERE slug = ? LIMIT 1')
-      .bind(slug)
-      .first();
-    
-    if (!result) return null;
-    
-    return rowToPost(result);
+    const post = await db.getPostBySlug(slug);
+    if (!post) return mockPosts.find(p => p.slug === slug) || null;
+    return rowToPost(post);
   } catch (error) {
     console.error('Error fetching post by slug:', error);
     return mockPosts.find(p => p.slug === slug) || null;
@@ -110,18 +86,9 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 
 // Get all locations
 export async function getLocations(): Promise<Location[]> {
-  const db = getDB();
-  
-  if (!db) {
-    return mockLocations;
-  }
-  
   try {
-    const result = await db
-      .prepare('SELECT * FROM locations ORDER BY name ASC')
-      .all();
-    
-    return result.results ? result.results.map(rowToLocation) : [];
+    const locations = await db.getLocations();
+    return locations.map(rowToLocation);
   } catch (error) {
     console.error('Error fetching locations:', error);
     return mockLocations;
@@ -130,21 +97,10 @@ export async function getLocations(): Promise<Location[]> {
 
 // Get single location by slug
 export async function getLocationBySlug(slug: string): Promise<Location | null> {
-  const db = getDB();
-  
-  if (!db) {
-    return mockLocations.find(l => l.slug === slug) || null;
-  }
-  
   try {
-    const result = await db
-      .prepare('SELECT * FROM locations WHERE slug = ? LIMIT 1')
-      .bind(slug)
-      .first();
-    
-    if (!result) return null;
-    
-    return rowToLocation(result);
+    const location = await db.getLocationBySlug(slug);
+    if (!location) return mockLocations.find(l => l.slug === slug) || null;
+    return rowToLocation(location);
   } catch (error) {
     console.error('Error fetching location by slug:', error);
     return mockLocations.find(l => l.slug === slug) || null;

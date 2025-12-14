@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Save } from 'lucide-react'
-import { createPopup, updatePopup, type Popup } from '@/lib/popup-actions'
+import { createPopup, updatePopup } from '@/lib/popup-actions'
+import { Popup } from '@/lib/types'
 
 interface PopupFormProps {
   popup?: Popup

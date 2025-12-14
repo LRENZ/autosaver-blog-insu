@@ -12,7 +12,7 @@ interface PopupProps {
   ctaText: string
   ctaUrl: string
   triggerType: 'onload' | 'exit' | 'scroll' | 'time'
-  triggerValue?: string
+  triggerValue?: number
   displayPages: string
 }
 
@@ -51,19 +51,19 @@ export default function Popup({
     // Handle different trigger types
     switch (triggerType) {
       case 'onload':
-        const delay = triggerValue ? parseInt(triggerValue) : 0
+        const delay = triggerValue || 0
         setTimeout(() => setIsOpen(true), delay * 1000)
         break
 
       case 'time':
-        const timeDelay = triggerValue ? parseInt(triggerValue) : 5
+        const timeDelay = triggerValue || 5000
         setTimeout(() => setIsOpen(true), timeDelay * 1000)
         break
 
       case 'scroll':
         const handleScroll = () => {
           const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
-          const threshold = triggerValue ? parseInt(triggerValue) : 50
+          const threshold = triggerValue || 50
           if (scrollPercent >= threshold) {
             setIsOpen(true)
             window.removeEventListener('scroll', handleScroll)

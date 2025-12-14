@@ -66,7 +66,7 @@ export default async function PopupsPage() {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <form action={async () => {
                     'use server'
-                    await togglePopupStatus(popup.id)
+                    await togglePopupStatus(popup.id, popup.status)
                   }}>
                     <button
                       type="submit"
@@ -108,11 +108,6 @@ export default async function PopupsPage() {
                       <button
                         type="submit"
                         className="text-red-600 hover:text-red-900 p-2 hover:bg-red-50 rounded transition-colors"
-                        onClick={(e) => {
-                          if (!confirm('Are you sure you want to delete this popup?')) {
-                            e.preventDefault()
-                          }
-                        }}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>

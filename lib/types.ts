@@ -21,3 +21,19 @@ export interface Location {
   description: string;
   averageRate: string;
 }
+
+export interface Popup {
+  id: string;
+  name: string;
+  title: string;
+  content: string;
+  imageUrl: string;
+  ctaText: string;
+  ctaUrl: string;
+  triggerType: 'onload' | 'exit' | 'scroll' | 'time';
+  triggerValue: number;
+  displayPages: string;
+  status: 'active' | 'inactive';
+  createdAt: Date;
+  updatedAt: Date;
+}

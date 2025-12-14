@@ -1,200 +1,189 @@
-'use server'
+'use server';
 
-import { revalidatePath } from 'next/cache'
-import { getDB } from './db-adapter'
+import { revalidatePath } from 'next/cache';
+import { Popup } from './types';
+import db from './db';
 
-export interface Popup {
-  id: string
-  name: string
-  title: string
-  content: string
-  imageUrl?: string
-  ctaText: string
-  ctaUrl: string
-  triggerType: 'onload' | 'exit' | 'scroll' | 'time'
-  triggerValue?: string
-  displayPages: string
-  status: 'active' | 'inactive'
-  createdAt: string
-  updatedAt: string
-}
-
-// Get all active popups
-export async function getActivePopups(): Promise<Popup[]> {
-  try {
-    const db = getDB()
-    if (!db) return []
-    const popups = db.prepare(`
-      SELECT id, name, title, content, image_url as imageUrl, 
-             cta_text as ctaText, cta_url as ctaUrl,
-             trigger_type as triggerType, trigger_value as triggerValue,
-             display_pages as displayPages, status,
-             created_at as createdAt, updated_at as updatedAt
-      FROM popups 
-      WHERE status = 'active'
-      ORDER BY created_at DESC
-    `).all() as Popup[]
-
-    return Array.isArray(popups) ? popups : []
-  } catch (error) {
-    console.error('Error fetching active popups:', error)
-    return []
-  }
-}
-
-// Get all popups (for admin)
+// Get all popups (admin)
 export async function getAllPopups(): Promise<Popup[]> {
   try {
-    const db = getDB()
-    if (!db) return []
-    const popups = db.prepare(`
-      SELECT id, name, title, content, image_url as imageUrl, 
-             cta_text as ctaText, cta_url as ctaUrl,
-             trigger_type as triggerType, trigger_value as triggerValue,
-             display_pages as displayPages, status,
-             created_at as createdAt, updated_at as updatedAt
-      FROM popups 
-      ORDER BY created_at DESC
-    `).all() as Popup[]
-
-    return Array.isArray(popups) ? popups : []
+    const popups = await db.getAllPopups();
+    return popups.map((row: any) => ({
+      id: row.id,
+      name: row.name,
+      title: row.title,
+      content: row.content,
+      imageUrl: row.image_url,
+      ctaText: row.cta_text,
+      ctaUrl: row.cta_url,
+      triggerType: row.trigger_type as 'onload' | 'exit' | 'scroll' | 'time',
+      triggerValue: row.trigger_value,
+      displayPages: row.display_pages,
+      status: row.status as 'active' | 'inactive',
+      createdAt: new Date(row.created_at),
+      updatedAt: new Date(row.updated_at),
+    }));
   } catch (error) {
-    console.error('Error fetching all popups:', error)
-    return []
+    console.error('Error fetching all popups:', error);
+    return [];
   }
 }
 
 // Get popup by ID
 export async function getPopupById(id: string): Promise<Popup | null> {
-  const db = getDB()
-  const popup = db.prepare(`
-    SELECT id, name, title, content, image_url as imageUrl, 
-           cta_text as ctaText, cta_url as ctaUrl,
-           trigger_type as triggerType, trigger_value as triggerValue,
-           display_pages as displayPages, status,
-           created_at as createdAt, updated_at as updatedAt
-    FROM popups 
-    WHERE id = ?
-  `).get(id) as Popup | undefined
+  try {
+    const popups = await db.getAllPopups();
+    const row = popups.find((p: any) => p.id === id);
+    if (!row) return null;
 
-  return popup || null
+    return {
+      id: row.id,
+      name: row.name,
+      title: row.title,
+      content: row.content,
+      imageUrl: row.image_url,
+      ctaText: row.cta_text,
+      ctaUrl: row.cta_url,
+      triggerType: row.trigger_type as 'onload' | 'exit' | 'scroll' | 'time',
+      triggerValue: row.trigger_value,
+      displayPages: row.display_pages,
+      status: row.status as 'active' | 'inactive',
+      createdAt: new Date(row.created_at),
+      updatedAt: new Date(row.updated_at),
+    };
+  } catch (error) {
+    console.error('Error fetching popup by ID:', error);
+    return null;
+  }
+}
+
+// Get active popups (public)
+export async function getActivePopups(): Promise<Popup[]> {
+  try {
+    const popups = await db.getActivePopups();
+    return popups.map((row: any) => ({
+      id: row.id,
+      name: row.name,
+      title: row.title,
+      content: row.content,
+      imageUrl: row.image_url,
+      ctaText: row.cta_text,
+      ctaUrl: row.cta_url,
+      triggerType: row.trigger_type as 'onload' | 'exit' | 'scroll' | 'time',
+      triggerValue: row.trigger_value,
+      displayPages: row.display_pages,
+      status: row.status as 'active' | 'inactive',
+      createdAt: new Date(row.created_at),
+      updatedAt: new Date(row.updated_at),
+    }));
+  } catch (error) {
+    console.error('Error fetching active popups:', error);
+    return [];
+  }
 }
 
 // Create popup
-export async function createPopup(data: Omit<Popup, 'id' | 'createdAt' | 'updatedAt'>) {
-  const db = getDB()
-  const id = `popup_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-  const now = new Date().toISOString()
+export async function createPopup(data: any) {
+  try {
+    const id = `popup_${Date.now()}`;
+    const newPopup = {
+      id,
+      name: data.name,
+      title: data.title,
+      content: data.content,
+      image_url: data.imageUrl,
+      cta_text: data.ctaText,
+      cta_url: data.ctaUrl,
+      trigger_type: data.triggerType,
+      trigger_value: Number(data.triggerValue),
+      display_pages: data.displayPages,
+      status: data.status,
+    };
 
-  db.prepare(`
-    INSERT INTO popups (
-      id, name, title, content, image_url, cta_text, cta_url,
-      trigger_type, trigger_value, display_pages, status,
-      created_at, updated_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(
-    id,
-    data.name,
-    data.title,
-    data.content,
-    data.imageUrl || null,
-    data.ctaText,
-    data.ctaUrl,
-    data.triggerType,
-    data.triggerValue || null,
-    data.displayPages,
-    data.status,
-    now,
-    now
-  )
-
-  revalidatePath('/')
-  revalidatePath('/admin/popups')
-  return { success: true, id }
+    await db.createPopup(newPopup);
+    
+    revalidatePath('/');
+    revalidatePath('/admin/popups');
+    
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error creating popup:', error);
+    return { 
+      success: false, 
+      error: error.message || 'Failed to create popup' 
+    };
+  }
 }
 
 // Update popup
-export async function updatePopup(id: string, data: Partial<Omit<Popup, 'id' | 'createdAt' | 'updatedAt'>>) {
-  const db = getDB()
-  const now = new Date().toISOString()
+export async function updatePopup(id: string, data: any) {
+  try {
+    const updatedPopup = {
+      name: data.name,
+      title: data.title,
+      content: data.content,
+      image_url: data.imageUrl,
+      cta_text: data.ctaText,
+      cta_url: data.ctaUrl,
+      trigger_type: data.triggerType,
+      trigger_value: Number(data.triggerValue),
+      display_pages: data.displayPages,
+      status: data.status,
+      updated_at: new Date().toISOString(),
+    };
 
-  const fields: string[] = []
-  const values: any[] = []
+    await db.updatePopup(id, updatedPopup);
+    
+    revalidatePath('/');
+    revalidatePath('/admin/popups');
+    
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error updating popup:', error);
+    return { 
+      success: false, 
+      error: error.message || 'Failed to update popup' 
+    };
+  }
+}
 
-  if (data.name !== undefined) {
-    fields.push('name = ?')
-    values.push(data.name)
+// Toggle popup status
+export async function togglePopupStatus(id: string, currentStatus: string) {
+  try {
+    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+    
+    await db.updatePopup(id, {
+      status: newStatus,
+      updated_at: new Date().toISOString(),
+    });
+    
+    revalidatePath('/');
+    revalidatePath('/admin/popups');
+    
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error toggling popup status:', error);
+    return { 
+      success: false, 
+      error: error.message || 'Failed to toggle popup status' 
+    };
   }
-  if (data.title !== undefined) {
-    fields.push('title = ?')
-    values.push(data.title)
-  }
-  if (data.content !== undefined) {
-    fields.push('content = ?')
-    values.push(data.content)
-  }
-  if (data.imageUrl !== undefined) {
-    fields.push('image_url = ?')
-    values.push(data.imageUrl)
-  }
-  if (data.ctaText !== undefined) {
-    fields.push('cta_text = ?')
-    values.push(data.ctaText)
-  }
-  if (data.ctaUrl !== undefined) {
-    fields.push('cta_url = ?')
-    values.push(data.ctaUrl)
-  }
-  if (data.triggerType !== undefined) {
-    fields.push('trigger_type = ?')
-    values.push(data.triggerType)
-  }
-  if (data.triggerValue !== undefined) {
-    fields.push('trigger_value = ?')
-    values.push(data.triggerValue)
-  }
-  if (data.displayPages !== undefined) {
-    fields.push('display_pages = ?')
-    values.push(data.displayPages)
-  }
-  if (data.status !== undefined) {
-    fields.push('status = ?')
-    values.push(data.status)
-  }
-
-  fields.push('updated_at = ?')
-  values.push(now)
-  values.push(id)
-
-  db.prepare(`
-    UPDATE popups 
-    SET ${fields.join(', ')}
-    WHERE id = ?
-  `).run(...values)
-
-  revalidatePath('/')
-  revalidatePath('/admin/popups')
-  return { success: true }
 }
 
 // Delete popup
 export async function deletePopup(id: string) {
-  const db = getDB()
-  db.prepare('DELETE FROM popups WHERE id = ?').run(id)
-
-  revalidatePath('/')
-  revalidatePath('/admin/popups')
-  return { success: true }
-}
-
-// Toggle popup status
-export async function togglePopupStatus(id: string) {
-  const db = getDB()
-  const popup = await getPopupById(id)
-  if (!popup) return { success: false, error: 'Popup not found' }
-
-  const newStatus = popup.status === 'active' ? 'inactive' : 'active'
-  await updatePopup(id, { status: newStatus })
-
-  return { success: true, status: newStatus }
+  try {
+    await db.deletePopup(id);
+    
+    revalidatePath('/');
+    revalidatePath('/admin/popups');
+    
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error deleting popup:', error);
+    return { 
+      success: false, 
+      error: error.message || 'Failed to delete popup' 
+    };
+  }
 }

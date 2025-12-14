@@ -11,7 +11,7 @@ interface PopupData {
   ctaText: string
   ctaUrl: string
   triggerType: 'onload' | 'exit' | 'scroll' | 'time'
-  triggerValue?: string
+  triggerValue?: number
   displayPages: string
 }
 
