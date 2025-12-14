@@ -21,35 +21,47 @@ export interface Popup {
 
 // Get all active popups
 export async function getActivePopups(): Promise<Popup[]> {
-  const db = getDB()
-  const popups = db.prepare(`
-    SELECT id, name, title, content, image_url as imageUrl, 
-           cta_text as ctaText, cta_url as ctaUrl,
-           trigger_type as triggerType, trigger_value as triggerValue,
-           display_pages as displayPages, status,
-           created_at as createdAt, updated_at as updatedAt
-    FROM popups 
-    WHERE status = 'active'
-    ORDER BY created_at DESC
-  `).all() as Popup[]
+  try {
+    const db = getDB()
+    if (!db) return []
+    const popups = db.prepare(`
+      SELECT id, name, title, content, image_url as imageUrl, 
+             cta_text as ctaText, cta_url as ctaUrl,
+             trigger_type as triggerType, trigger_value as triggerValue,
+             display_pages as displayPages, status,
+             created_at as createdAt, updated_at as updatedAt
+      FROM popups 
+      WHERE status = 'active'
+      ORDER BY created_at DESC
+    `).all() as Popup[]
 
-  return popups
+    return Array.isArray(popups) ? popups : []
+  } catch (error) {
+    console.error('Error fetching active popups:', error)
+    return []
+  }
 }
 
 // Get all popups (for admin)
 export async function getAllPopups(): Promise<Popup[]> {
-  const db = getDB()
-  const popups = db.prepare(`
-    SELECT id, name, title, content, image_url as imageUrl, 
-           cta_text as ctaText, cta_url as ctaUrl,
-           trigger_type as triggerType, trigger_value as triggerValue,
-           display_pages as displayPages, status,
-           created_at as createdAt, updated_at as updatedAt
-    FROM popups 
-    ORDER BY created_at DESC
-  `).all() as Popup[]
+  try {
+    const db = getDB()
+    if (!db) return []
+    const popups = db.prepare(`
+      SELECT id, name, title, content, image_url as imageUrl, 
+             cta_text as ctaText, cta_url as ctaUrl,
+             trigger_type as triggerType, trigger_value as triggerValue,
+             display_pages as displayPages, status,
+             created_at as createdAt, updated_at as updatedAt
+      FROM popups 
+      ORDER BY created_at DESC
+    `).all() as Popup[]
 
-  return popups
+    return Array.isArray(popups) ? popups : []
+  } catch (error) {
+    console.error('Error fetching all popups:', error)
+    return []
+  }
 }
 
 // Get popup by ID
