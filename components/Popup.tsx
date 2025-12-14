@@ -14,6 +14,8 @@ interface PopupProps {
   triggerType: 'onload' | 'exit' | 'scroll' | 'time'
   triggerValue?: number
   displayPages: string
+  includePages?: string
+  excludePages?: string
 }
 
 export default function Popup({
@@ -25,7 +27,9 @@ export default function Popup({
   ctaUrl,
   triggerType,
   triggerValue,
-  displayPages
+  displayPages,
+  includePages,
+  excludePages
 }: PopupProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [shouldShow, setShouldShow] = useState(false)
@@ -44,21 +48,67 @@ export default function Popup({
     const currentPath = window.location.pathname
     console.log('[Popup] Current path:', currentPath);
     
-    const pages = displayPages.split(',').map(p => p.trim())
-    console.log('[Popup] Display pages config:', pages);
+    // Check exclude pages first (highest priority)
+    if (excludePages) {
+      const excludedPaths = excludePages.split(',').map(p => p.trim())
+      console.log('[Popup] Exclude pages:', excludedPaths);
+      
+      const isExcluded = excludedPaths.some(page => {
+        if (page === '*') return true // Exclude all
+        if (page.endsWith('/*')) {
+          // Wildcard exclude: /admin/* excludes all /admin/... paths
+          const prefix = page.slice(0, -2)
+          return currentPath.startsWith(prefix)
+        }
+        return currentPath === page || currentPath.startsWith(page + '/')
+      })
+      
+      if (isExcluded) {
+        console.log('[Popup] Page is excluded, skipping:', id);
+        return
+      }
+    }
     
-    const shouldDisplay = pages.includes('all') || pages.some(page => {
-      if (page === 'home' && currentPath === '/') return true
-      if (page === 'blog' && currentPath.startsWith('/blog')) return true
-      if (page === 'location' && currentPath.startsWith('/location')) return true
-      return currentPath === page
-    })
+    // Check include pages (if specified)
+    if (includePages) {
+      const includedPaths = includePages.split(',').map(p => p.trim())
+      console.log('[Popup] Include pages:', includedPaths);
+      
+      const isIncluded = includedPaths.some(page => {
+        if (page === '*') return true // Include all
+        if (page === '/') return currentPath === '/' // Exact home page
+        if (page.endsWith('/*')) {
+          // Wildcard include: /blog/* includes all /blog/... paths
+          const prefix = page.slice(0, -2)
+          return currentPath.startsWith(prefix)
+        }
+        return currentPath === page || currentPath.startsWith(page + '/')
+      })
+      
+      if (!isIncluded) {
+        console.log('[Popup] Page is not included, skipping:', id);
+        return
+      }
+      
+      console.log('[Popup] Page is included');
+    } else {
+      // Legacy displayPages logic (backwards compatibility)
+      const pages = displayPages.split(',').map(p => p.trim())
+      console.log('[Popup] Display pages config (legacy):', pages);
+      
+      const shouldDisplay = pages.includes('all') || pages.some(page => {
+        if (page === 'home' && currentPath === '/') return true
+        if (page === 'blog' && currentPath.startsWith('/blog')) return true
+        if (page === 'location' && currentPath.startsWith('/location')) return true
+        return currentPath === page
+      })
 
-    console.log('[Popup] Should display:', shouldDisplay);
-    
-    if (!shouldDisplay) {
-      console.log('[Popup] Page does not match display rules, skipping:', id);
-      return;
+      console.log('[Popup] Should display (legacy):', shouldDisplay);
+      
+      if (!shouldDisplay) {
+        console.log('[Popup] Page does not match display rules, skipping:', id);
+        return;
+      }
     }
     
     setShouldShow(true)

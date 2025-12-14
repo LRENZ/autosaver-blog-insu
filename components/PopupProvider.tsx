@@ -13,6 +13,8 @@ interface PopupData {
   triggerType: 'onload' | 'exit' | 'scroll' | 'time'
   triggerValue?: number
   displayPages: string
+  includePages?: string
+  excludePages?: string
 }
 
 interface PopupProviderProps {

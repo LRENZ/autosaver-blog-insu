@@ -24,6 +24,8 @@ export default function PopupForm({ popup }: PopupFormProps) {
     triggerType: popup?.triggerType || 'time' as const,
     triggerValue: popup?.triggerValue || '5',
     displayPages: popup?.displayPages || 'all',
+    includePages: popup?.includePages || '',
+    excludePages: popup?.excludePages || '',
     status: popup?.status || 'active' as const,
   })
 
@@ -200,10 +202,10 @@ export default function PopupForm({ popup }: PopupFormProps) {
         </div>
       </div>
 
-      {/* Display Pages */}
+      {/* Display Pages (Legacy - kept for backwards compatibility) */}
       <div>
         <label htmlFor="displayPages" className="block text-sm font-medium text-gray-700 mb-2">
-          Display on Pages *
+          Display on Pages (Legacy) *
         </label>
         <input
           type="text"
@@ -215,7 +217,53 @@ export default function PopupForm({ popup }: PopupFormProps) {
           placeholder="all, home, blog, location, /custom-path"
         />
         <p className="mt-1 text-sm text-gray-500">
-          Comma-separated: "all" for all pages, "home", "blog", "location", or specific paths
+          Legacy field. Use Include/Exclude Pages below for more control.
+        </p>
+      </div>
+
+      {/* Include Pages */}
+      <div>
+        <label htmlFor="includePages" className="block text-sm font-medium text-gray-700 mb-2">
+          📌 Include Pages (Optional)
+        </label>
+        <input
+          type="text"
+          id="includePages"
+          value={formData.includePages || ''}
+          onChange={(e) => setFormData({ ...formData, includePages: e.target.value })}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+          placeholder="/, /blog/*, /location/california"
+        />
+        <p className="mt-1 text-sm text-gray-500">
+          ✅ Show popup ONLY on these pages. Supports wildcards: <code className="bg-gray-100 px-1 rounded">/*</code> means all sub-paths. Leave empty to use legacy displayPages.
+        </p>
+        <p className="mt-1 text-xs text-gray-400">
+          Examples: <code className="bg-gray-100 px-1 rounded">/</code> (home only), 
+          <code className="bg-gray-100 px-1 rounded ml-1">/blog/*</code> (all blog posts), 
+          <code className="bg-gray-100 px-1 rounded ml-1">*</code> (all pages)
+        </p>
+      </div>
+
+      {/* Exclude Pages */}
+      <div>
+        <label htmlFor="excludePages" className="block text-sm font-medium text-gray-700 mb-2">
+          🚫 Exclude Pages (Optional)
+        </label>
+        <input
+          type="text"
+          id="excludePages"
+          value={formData.excludePages || ''}
+          onChange={(e) => setFormData({ ...formData, excludePages: e.target.value })}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+          placeholder="/admin/*, /login"
+        />
+        <p className="mt-1 text-sm text-gray-500">
+          ❌ NEVER show popup on these pages. Takes priority over include rules. Supports wildcards.
+        </p>
+        <p className="mt-1 text-xs text-gray-400">
+          Examples: <code className="bg-gray-100 px-1 rounded">/admin/*</code> (all admin pages), 
+          <code className="bg-gray-100 px-1 rounded ml-1">/checkout</code> (checkout page), 
+          <code className="bg-gray-100 px-1 rounded ml-1">*</code> (nowhere)
         </p>
       </div>
 

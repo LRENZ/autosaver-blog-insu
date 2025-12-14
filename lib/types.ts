@@ -32,7 +32,9 @@ export interface Popup {
   ctaUrl: string;
   triggerType: 'onload' | 'exit' | 'scroll' | 'time';
   triggerValue: number;
-  displayPages: string;
+  displayPages: string; // Legacy: 'all', 'home', 'blog', 'location', or comma-separated paths
+  includePages?: string; // New: comma-separated paths to include (e.g., '/, /blog, /location/california')
+  excludePages?: string; // New: comma-separated paths to exclude (e.g., '/admin, /login')
   status: 'active' | 'inactive';
   createdAt: Date;
   updatedAt: Date;
