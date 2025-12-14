@@ -5,6 +5,18 @@ export const runtime = 'edge';
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if BLOB_READ_WRITE_TOKEN is configured
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      console.error('[Upload API] BLOB_READ_WRITE_TOKEN not configured');
+      return NextResponse.json(
+        { 
+          error: 'Image upload is not configured. Please set up Vercel Blob storage in your Vercel Dashboard. See VERCEL_BLOB_SETUP.md for instructions.',
+          missingConfig: true
+        },
+        { status: 503 }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get('file') as File;
 

@@ -60,9 +60,12 @@ export default function ImageUpload({
         body: formData,
       });
 
-      const data = await response.json() as { error?: string; url?: string; success?: boolean };
+      const data = await response.json() as { error?: string; url?: string; success?: boolean; missingConfig?: boolean };
 
       if (!response.ok) {
+        if (data.missingConfig) {
+          throw new Error('⚠️ Vercel Blob not configured. Please create Blob storage in Vercel Dashboard or use an external image URL instead.');
+        }
         throw new Error(data.error || 'Upload failed');
       }
 
