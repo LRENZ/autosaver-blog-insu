@@ -58,7 +58,7 @@ export default function PopupForm({ popup }: PopupFormProps) {
           required
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
           placeholder="e.g., Spring Sale 2024"
         />
         <p className="mt-1 text-sm text-gray-500">For internal reference only</p>
@@ -75,7 +75,7 @@ export default function PopupForm({ popup }: PopupFormProps) {
           required
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
           placeholder="e.g., ⏰ Your Exclusive Discount Expires Soon!"
         />
       </div>
@@ -91,7 +91,7 @@ export default function PopupForm({ popup }: PopupFormProps) {
           rows={6}
           value={formData.content}
           onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm text-gray-900"
           placeholder="HTML content (supports basic tags like <p>, <strong>, <ul>, etc.)"
         />
         <p className="mt-1 text-sm text-gray-500">Supports HTML formatting</p>
@@ -107,7 +107,7 @@ export default function PopupForm({ popup }: PopupFormProps) {
           id="imageUrl"
           value={formData.imageUrl}
           onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
           placeholder="https://example.com/image.jpg"
         />
       </div>
@@ -124,7 +124,7 @@ export default function PopupForm({ popup }: PopupFormProps) {
             required
             value={formData.ctaText}
             onChange={(e) => setFormData({ ...formData, ctaText: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
             placeholder="Get My Free Quote"
           />
         </div>
@@ -138,7 +138,7 @@ export default function PopupForm({ popup }: PopupFormProps) {
             required
             value={formData.ctaUrl}
             onChange={(e) => setFormData({ ...formData, ctaUrl: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
             placeholder="https://example.com/quote"
           />
         </div>
@@ -154,7 +154,7 @@ export default function PopupForm({ popup }: PopupFormProps) {
             id="triggerType"
             value={formData.triggerType}
             onChange={(e) => setFormData({ ...formData, triggerType: e.target.value as any })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
           >
             <option value="time">Time Delay</option>
             <option value="onload">On Page Load</option>
@@ -171,7 +171,7 @@ export default function PopupForm({ popup }: PopupFormProps) {
             id="triggerValue"
             value={formData.triggerValue}
             onChange={(e) => setFormData({ ...formData, triggerValue: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
             placeholder={
               formData.triggerType === 'time' || formData.triggerType === 'onload'
                 ? 'Seconds (e.g., 5)'
@@ -194,7 +194,7 @@ export default function PopupForm({ popup }: PopupFormProps) {
           required
           value={formData.displayPages}
           onChange={(e) => setFormData({ ...formData, displayPages: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
           placeholder="all, home, blog, location, /custom-path"
         />
         <p className="mt-1 text-sm text-gray-500">
@@ -211,7 +211,7 @@ export default function PopupForm({ popup }: PopupFormProps) {
           id="status"
           value={formData.status}
           onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
         >
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>

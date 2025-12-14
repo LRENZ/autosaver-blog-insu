@@ -111,7 +111,7 @@ export default function CreatePostPage() {
                 ...prev, 
                 category: e.target.value as 'Savings' | 'Guides' | 'Location'
               }))}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900"
               required
             >
               <option value="Savings">Savings</option>
@@ -181,7 +181,7 @@ export default function CreatePostPage() {
                 ...prev, 
                 status: e.target.value as 'published' | 'draft'
               }))}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900"
               required
             >
               <option value="draft">Draft</option>

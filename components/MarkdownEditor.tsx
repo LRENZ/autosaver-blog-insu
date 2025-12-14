@@ -68,7 +68,7 @@ export default function MarkdownEditor({
             rows={rows}
             required={required}
             placeholder={placeholder}
-            className="w-full px-4 py-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
+            className="w-full px-4 py-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y text-gray-900"
           />
         ) : (
           <div className="p-4 bg-white min-h-[300px]">

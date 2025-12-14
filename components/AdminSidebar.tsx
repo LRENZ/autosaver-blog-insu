@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, FileText, Settings, PlusCircle, Home, Megaphone, LogOut } from 'lucide-react';
+import { LayoutDashboard, FileText, Settings, PlusCircle, Home, Megaphone, LogOut, MapPin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'All Posts', href: '/admin/posts', icon: FileText },
   { name: 'Create New', href: '/admin/posts/create', icon: PlusCircle },
+  { name: 'Locations', href: '/admin/locations', icon: MapPin },
   { name: 'Popups', href: '/admin/popups', icon: Megaphone },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];

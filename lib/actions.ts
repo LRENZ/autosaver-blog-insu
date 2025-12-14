@@ -56,7 +56,7 @@ export async function createPost(formData: FormData) {
 // READ: Get all posts (for admin)
 export async function getAllPosts(): Promise<Post[]> {
   try {
-    const posts = await db.getPosts();
+    const posts = await db.getAllPostsForAdmin();
     return posts.map((row: any) => ({
       id: String(row.id),
       title: row.title,

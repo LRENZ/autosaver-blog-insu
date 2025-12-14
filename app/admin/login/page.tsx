@@ -71,7 +71,7 @@ export default function AdminLoginPage() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                 placeholder="admin"
                 required
                 autoComplete="username"
@@ -92,7 +92,7 @@ export default function AdminLoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                 placeholder="••••••••"
                 required
                 autoComplete="current-password"
@@ -108,14 +108,6 @@ export default function AdminLoginPage() {
             {loading ? 'Logging in...' : 'Sign In'}
           </button>
         </form>
-
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-          <p className="text-sm text-gray-600 text-center">
-            <strong>Demo Credentials:</strong><br />
-            Username: <code className="bg-white px-2 py-1 rounded">admin</code><br />
-            Password: <code className="bg-white px-2 py-1 rounded">creatorshouse1!</code>
-          </p>
-        </div>
 
         <div className="mt-6 text-center">
           <a href="/" className="text-sm text-blue-600 hover:text-blue-700">

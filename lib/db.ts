@@ -14,6 +14,16 @@ export const db = {
     return data || [];
   },
 
+  async getAllPostsForAdmin() {
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .order('created_at', { ascending: false});
+    
+    if (error) throw error;
+    return data || [];
+  },
+
   async getPostBySlug(slug: string) {
     const { data, error } = await supabase
       .from('posts')
@@ -88,6 +98,49 @@ export const db = {
     
     if (error && error.code !== 'PGRST116') throw error;
     return data || null;
+  },
+
+  async getLocationById(id: number) {
+    const { data, error } = await supabase
+      .from('locations')
+      .select('*')
+      .eq('id', id)
+      .single();
+    
+    if (error && error.code !== 'PGRST116') throw error;
+    return data || null;
+  },
+
+  async createLocation(location: any) {
+    const { data, error } = await supabase
+      .from('locations')
+      .insert([location])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateLocation(id: number, location: any) {
+    const { data, error } = await supabase
+      .from('locations')
+      .update(location)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteLocation(id: number) {
+    const { error } = await supabase
+      .from('locations')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
   },
 
   // Location blogs operations

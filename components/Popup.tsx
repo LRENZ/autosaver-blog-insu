@@ -56,7 +56,7 @@ export default function Popup({
         break
 
       case 'time':
-        const timeDelay = triggerValue || 5000
+        const timeDelay = triggerValue || 5
         setTimeout(() => setIsOpen(true), timeDelay * 1000)
         break
 
