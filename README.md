@@ -1,6 +1,6 @@
 # AutoSaver - Car Insurance Niche Blog
 
-A high-performance **Car Insurance Blog** with a public-facing website and a **secure Admin Dashboard** for content management, built with Next.js 14+ App Router.
+A high-performance **Car Insurance Blog** with a public-facing website and a **secure Admin Dashboard** for content management, built with Next.js 14+ App Router and **Cloudflare D1 Database**.
 
 ## 🚀 Features
 
@@ -14,20 +14,23 @@ A high-performance **Car Insurance Blog** with a public-facing website and a **s
 
 ### Admin Dashboard
 - **Complete CMS** for managing blog articles
-- **CRUD Operations** using Next.js Server Actions
+- **CRUD Operations** using Next.js Server Actions with D1 Database
 - **Post Management** with status tracking (Published/Draft)
 - **Rich Editor Interface** with SEO meta fields
 - **Clean, Utilitarian Design** optimized for content management
 - **Sidebar Navigation** for easy admin access
+- **Real-time Database** with 6 pre-seeded articles
 
 ## 🛠️ Tech Stack
 
-- **Framework:** Next.js 14+ (App Router)
+- **Framework:** Next.js 16 (App Router)
 - **Language:** TypeScript
+- **Database:** Cloudflare D1 (SQLite)
 - **Styling:** Tailwind CSS
 - **Form Handling:** React Hook Form + Zod (ready to integrate)
 - **State Management:** Server Actions
 - **Icons:** Lucide React
+- **Deployment:** Cloudflare Pages (configured)
 
 ## 📁 Project Structure
 
