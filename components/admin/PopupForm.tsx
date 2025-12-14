@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Save } from 'lucide-react'
 import { createPopup, updatePopup } from '@/lib/popup-actions'
 import { Popup } from '@/lib/types'
+import ImageUpload from '@/components/ImageUpload'
 
 interface PopupFormProps {
   popup?: Popup
@@ -97,10 +98,17 @@ export default function PopupForm({ popup }: PopupFormProps) {
         <p className="mt-1 text-sm text-gray-500">Supports HTML formatting</p>
       </div>
 
-      {/* Image URL */}
+      {/* Image Upload */}
+      <ImageUpload
+        label="Popup Image (optional)"
+        value={formData.imageUrl}
+        onChange={(url) => setFormData({ ...formData, imageUrl: url })}
+      />
+      
+      {/* Manual URL Input (Optional) */}
       <div>
         <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-2">
-          Image URL (optional)
+          Or enter image URL manually
         </label>
         <input
           type="url"

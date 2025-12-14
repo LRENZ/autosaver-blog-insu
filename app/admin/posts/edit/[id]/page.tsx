@@ -10,6 +10,7 @@ import Input from '@/components/Input';
 import Textarea from '@/components/Textarea';
 import Button from '@/components/Button';
 import MarkdownEditor from '@/components/MarkdownEditor';
+import ImageUpload from '@/components/ImageUpload';
 
 interface EditPostPageProps {
   params: Promise<{
@@ -169,9 +170,17 @@ export default function EditPostPage({ params }: EditPostPageProps) {
             </select>
           </div>
 
-          {/* Cover Image URL */}
+          {/* Cover Image Upload */}
+          <ImageUpload
+            label="Cover Image"
+            value={formData.coverImage}
+            onChange={(url) => setFormData(prev => ({ ...prev, coverImage: url }))}
+            required
+          />
+          
+          {/* Manual URL Input (Optional) */}
           <Input
-            label="Cover Image URL"
+            label="Or enter image URL manually"
             value={formData.coverImage}
             onChange={(e) => setFormData(prev => ({ ...prev, coverImage: e.target.value }))}
             placeholder="https://example.com/image.jpg"
