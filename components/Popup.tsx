@@ -168,6 +168,18 @@ export default function Popup({
         setTimeout(() => {
           console.log('[Popup] Opening popup (onload):', id);
           setIsOpen(true);
+          
+          // GTM Event: Popup Shown
+          if (typeof window !== 'undefined' && (window as any).dataLayer) {
+            (window as any).dataLayer.push({
+              event: 'popup_shown',
+              popup_id: id,
+              popup_name: title,
+              trigger_type: triggerType,
+              display_frequency: displayFrequency,
+              page_path: window.location.pathname
+            });
+          }
         }, delay * 1000)
         break
 
@@ -177,6 +189,18 @@ export default function Popup({
         setTimeout(() => {
           console.log('[Popup] Opening popup (time):', id);
           setIsOpen(true);
+          
+          // GTM Event: Popup Shown
+          if (typeof window !== 'undefined' && (window as any).dataLayer) {
+            (window as any).dataLayer.push({
+              event: 'popup_shown',
+              popup_id: id,
+              popup_name: title,
+              trigger_type: triggerType,
+              display_frequency: displayFrequency,
+              page_path: window.location.pathname
+            });
+          }
         }, timeDelay * 1000)
         break
 
@@ -188,8 +212,21 @@ export default function Popup({
           console.log('[Popup] Scroll progress:', scrollPercent.toFixed(2), '% / threshold:', threshold, '%');
           if (scrollPercent >= threshold) {
             console.log('[Popup] Opening popup (scroll):', id);
-            setIsOpen(true)
-            window.removeEventListener('scroll', handleScroll)
+            setIsOpen(true);
+            
+            // GTM Event: Popup Shown
+            if (typeof window !== 'undefined' && (window as any).dataLayer) {
+              (window as any).dataLayer.push({
+                event: 'popup_shown',
+                popup_id: id,
+                popup_name: title,
+                trigger_type: triggerType,
+                display_frequency: displayFrequency,
+                page_path: window.location.pathname
+              });
+            }
+            
+            window.removeEventListener('scroll', handleScroll);
           }
         }
         window.addEventListener('scroll', handleScroll)
@@ -197,15 +234,50 @@ export default function Popup({
 
       case 'exit':
         console.log('[Popup] Exit intent trigger');
+        let exitIntentTriggered = false;
+        
         const handleExit = (e: MouseEvent) => {
-          if (e.clientY <= 0) {
-            console.log('[Popup] Opening popup (exit intent):', id);
-            setIsOpen(true)
-            document.removeEventListener('mouseleave', handleExit)
+          // Prevent multiple triggers
+          if (exitIntentTriggered) return;
+          
+          // Exit intent conditions:
+          // 1. Mouse moving upwards (clientY <= 0) - towards browser chrome/tabs
+          // 2. Mouse velocity check (fast movement indicates exit intent)
+          // 3. Not triggered from internal page elements
+          
+          const isTopEdge = e.clientY <= 0;
+          const isFromPage = e.relatedTarget === null;
+          
+          if (isTopEdge && isFromPage) {
+            console.log('[Popup] Exit intent detected! Opening popup:', id);
+            exitIntentTriggered = true;
+            setIsOpen(true);
+            
+            // GTM Event: Popup Shown (Exit Intent)
+            if (typeof window !== 'undefined' && (window as any).dataLayer) {
+              (window as any).dataLayer.push({
+                event: 'popup_shown',
+                popup_id: id,
+                popup_name: title,
+                trigger_type: triggerType,
+                display_frequency: displayFrequency,
+                page_path: window.location.pathname
+              });
+            }
+            
+            document.removeEventListener('mouseleave', handleExit);
           }
         }
-        document.addEventListener('mouseleave', handleExit)
-        return () => document.removeEventListener('mouseleave', handleExit)
+        
+        // Delay initial listener to avoid false positives on page load
+        const timeoutId = setTimeout(() => {
+          document.addEventListener('mouseleave', handleExit);
+        }, 1000); // Wait 1 second after page load
+        
+        return () => {
+          clearTimeout(timeoutId);
+          document.removeEventListener('mouseleave', handleExit);
+        }
     }
   }, [id, title, triggerType, triggerValue, displayPages, displayFrequency, includePages, excludePages])
 
@@ -239,13 +311,34 @@ export default function Popup({
   }
 
   const handleClose = () => {
-    setIsOpen(false)
-    markAsShown()
+    // GTM Event: Popup Closed
+    if (typeof window !== 'undefined' && (window as any).dataLayer) {
+      (window as any).dataLayer.push({
+        event: 'popup_closed',
+        popup_id: id,
+        popup_name: title,
+        page_path: window.location.pathname
+      });
+    }
+    
+    setIsOpen(false);
+    markAsShown();
   }
 
   const handleCTA = () => {
-    markAsShown()
-    window.location.href = ctaUrl
+    // GTM Event: Popup CTA Clicked
+    if (typeof window !== 'undefined' && (window as any).dataLayer) {
+      (window as any).dataLayer.push({
+        event: 'popup_cta_clicked',
+        popup_id: id,
+        popup_name: title,
+        cta_url: ctaUrl,
+        page_path: window.location.pathname
+      });
+    }
+    
+    markAsShown();
+    window.location.href = ctaUrl;
   }
 
   if (!shouldShow || !isOpen) return null
