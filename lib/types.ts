@@ -40,3 +40,13 @@ export interface Popup {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface SiteSetting {
+  id: string;
+  key: string;
+  value: string;
+  description: string | null;
+  category: string;
+  createdAt: Date;
+  updatedAt: Date;
+}

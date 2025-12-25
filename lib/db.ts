@@ -218,6 +218,76 @@ export const db = {
     
     if (error) throw error;
   },
+
+  // Site Settings operations
+  async getAllSettings() {
+    const { data, error } = await supabase
+      .from('site_settings')
+      .select('*')
+      .order('category', { ascending: true });
+    
+    if (error) throw error;
+    return data || [];
+  },
+
+  async getSettingsByCategory(category: string) {
+    const { data, error } = await supabase
+      .from('site_settings')
+      .select('*')
+      .eq('category', category)
+      .order('key', { ascending: true });
+    
+    if (error) throw error;
+    return data || [];
+  },
+
+  async getSettingByKey(key: string) {
+    const { data, error } = await supabase
+      .from('site_settings')
+      .select('*')
+      .eq('key', key)
+      .single();
+    
+    if (error && error.code !== 'PGRST116') throw error;
+    return data || null;
+  },
+
+  async createSetting(key: string, value: string, description: string | null, category: string) {
+    const { data, error } = await supabase
+      .from('site_settings')
+      .insert({
+        key,
+        value,
+        description,
+        category
+      })
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateSetting(key: string, value: string) {
+    const { data, error } = await supabase
+      .from('site_settings')
+      .update({ value })
+      .eq('key', key)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteSetting(key: string) {
+    const { error } = await supabase
+      .from('site_settings')
+      .delete()
+      .eq('key', key);
+    
+    if (error) throw error;
+  },
 };
 
 export default db;
