@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Calendar, Tag, ArrowLeft } from 'lucide-react';
 import { getPostBySlug, getPosts } from '@/lib/data';
+import { getCtaUrls } from '@/lib/settings-actions';
 import Button from '@/components/Button';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 
@@ -69,6 +70,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
+  const ctaUrls = await getCtaUrls();
 
   if (!post) {
     notFound();
@@ -195,10 +197,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               No phone calls, no hidden fees—just honest comparisons.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="flex-1 sm:flex-initial shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
-                Get Your Free Quote →
-              </Button>
-              <Link href="/">
+              <Link href={ctaUrls.cta_get_your_free_quote_url} className="flex-1 sm:flex-initial">
+                <Button size="lg" className="w-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
+                  Get Your Free Quote →
+                </Button>
+              </Link>
+              <Link href={ctaUrls.cta_learn_more_url}>
                 <Button size="lg" variant="secondary" className="w-full sm:w-auto">
                   Learn More
                 </Button>

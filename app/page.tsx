@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { CheckCircle2, MapPin, Star, Quote } from 'lucide-react';
 import { getPosts, getLocations } from '@/lib/data';
+import { getCtaUrls } from '@/lib/settings-actions';
 import Button from '@/components/Button';
 
 // Testimonials data
@@ -32,6 +33,7 @@ const testimonials = [
 export default async function HomePage() {
   const latestPosts = await getPosts(6);
   const topLocations = await getLocations();
+  const ctaUrls = await getCtaUrls();
 
   return (
     <div className="min-h-screen">
@@ -63,7 +65,7 @@ export default async function HomePage() {
               </ul>
 
               {/* CTA */}
-              <Link href="#quote">
+              <Link href={ctaUrls.cta_get_my_free_quote_url}>
                 <Button size="lg" className="text-xl px-10 py-4 shadow-xl hover:shadow-2xl">
                   Get My Free Quote
                 </Button>
@@ -274,13 +276,15 @@ export default async function HomePage() {
           <p className="text-xl text-orange-100 mb-8">
             Get personalized quotes from top providers in under 3 minutes
           </p>
-          <Button
-            size="lg"
-            variant="secondary"
-            className="text-lg bg-white text-orange-600 hover:bg-gray-100 px-10 py-4 shadow-2xl"
-          >
-            Get Your Free Quote Now
-          </Button>
+          <Link href={ctaUrls.cta_get_your_free_quote_url}>
+            <Button
+              size="lg"
+              variant="secondary"
+              className="text-lg bg-white text-orange-600 hover:bg-gray-100 px-10 py-4 shadow-2xl"
+            >
+              Get Your Free Quote Now
+            </Button>
+          </Link>
           <p className="mt-6 text-orange-100 text-sm">
             ✓ No credit card required  ✓ No hidden fees  ✓ 100% secure
           </p>

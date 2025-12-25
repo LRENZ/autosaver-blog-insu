@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { Car } from 'lucide-react';
+import { getCtaUrls } from '@/lib/settings-actions';
 
-export default function Header() {
+export default async function Header() {
+  const ctaUrls = await getCtaUrls();
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -27,7 +29,7 @@ export default function Header() {
 
           {/* CTA Button */}
           <Link
-            href="#quote"
+            href={ctaUrls.cta_get_quote_url}
             className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg font-semibold transition shadow-md hover:shadow-lg"
           >
             Get Quote

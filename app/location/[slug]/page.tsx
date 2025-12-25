@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MapPin, ArrowLeft, TrendingDown, Shield, Users } from 'lucide-react';
 import { getLocationBySlug, getLocations } from '@/lib/data';
+import { getCtaUrls } from '@/lib/settings-actions';
 import Button from '@/components/Button';
 
 interface LocationPageProps {
@@ -61,6 +62,7 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
 export default async function LocationPage({ params }: LocationPageProps) {
   const { slug } = await params;
   const location = await getLocationBySlug(slug);
+  const ctaUrls = await getCtaUrls();
 
   if (!location) {
     notFound();
@@ -184,9 +186,11 @@ export default async function LocationPage({ params }: LocationPageProps) {
                     <option>Insurance Expired</option>
                   </select>
                 </div>
-                <Button className="w-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all" size="lg">
-                  Compare Rates Now →
-                </Button>
+                <Link href={ctaUrls.cta_compare_rates_url}>
+                  <Button className="w-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all" size="lg">
+                    Compare Rates Now →
+                  </Button>
+                </Link>
                 <p className="text-xs text-center text-gray-500">
                   🔒 Your information is secure and will never be sold
                 </p>
@@ -306,14 +310,16 @@ export default async function LocationPage({ params }: LocationPageProps) {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-            <Button
-              size="lg"
-              variant="secondary"
-              className="bg-white text-orange-600 hover:bg-gray-100 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all px-10 py-4 text-lg font-bold"
-            >
-              Get Your Free Quote Now →
-            </Button>
-            <Link href="/">
+            <Link href={ctaUrls.cta_get_your_free_quote_url}>
+              <Button
+                size="lg"
+                variant="secondary"
+                className="bg-white text-orange-600 hover:bg-gray-100 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all px-10 py-4 text-lg font-bold"
+              >
+                Get Your Free Quote Now →
+              </Button>
+            </Link>
+            <Link href={ctaUrls.cta_learn_more_url}>
               <Button
                 size="lg"
                 className="bg-transparent border-2 border-white text-white hover:bg-white/10"
