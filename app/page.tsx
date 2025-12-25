@@ -65,7 +65,13 @@ export default async function HomePage() {
               </ul>
 
               {/* CTA */}
-              <Link href={ctaUrls.cta_get_my_free_quote_url}>
+              <Link 
+                href={ctaUrls.cta_get_my_free_quote_url}
+                data-gtm-event="hero_get_my_free_quote_click"
+                data-gtm-label="Get My Free Quote"
+                data-gtm-module="hero"
+                data-gtm-cta
+              >
                 <Button size="lg" className="text-xl px-10 py-4 shadow-xl hover:shadow-2xl">
                   Get My Free Quote
                 </Button>
@@ -180,6 +186,11 @@ export default async function HomePage() {
                 key={post.id}
                 href={`/blog/${post.slug}`}
                 className="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                data-gtm-event="home_blog_card_click"
+                data-gtm-label={post.title}
+                data-gtm-module="home"
+                data-gtm-card
+                data-gtm-card-type="blog"
               >
                 <div className="relative w-full h-48 overflow-hidden">
                   <Image
@@ -234,6 +245,11 @@ export default async function HomePage() {
                 key={location.id}
                 href={`/location/${location.slug}`}
                 className="group bg-gradient-to-br from-white to-gray-50 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border-l-4 border-orange-600 transform hover:-translate-y-1"
+                data-gtm-event="home_location_card_click"
+                data-gtm-label={location.name}
+                data-gtm-module="home"
+                data-gtm-card
+                data-gtm-card-type="location"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -276,7 +292,13 @@ export default async function HomePage() {
           <p className="text-xl text-orange-100 mb-8">
             Get personalized quotes from top providers in under 3 minutes
           </p>
-          <Link href={ctaUrls.cta_get_your_free_quote_url}>
+          <Link 
+            href={ctaUrls.cta_get_your_free_quote_url}
+            data-gtm-event="home_cta_get_your_free_quote_click"
+            data-gtm-label="Get Your Free Quote Now"
+            data-gtm-module="home_cta"
+            data-gtm-cta
+          >
             <Button
               size="lg"
               variant="secondary"

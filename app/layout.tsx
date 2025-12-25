@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PopupProvider from "@/components/PopupProvider";
+import GTMTrackingInit from "@/components/GTMTrackingInit";
 import { getActivePopups } from "@/lib/popup-actions";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -110,6 +111,7 @@ export default async function RootLayout({
         <main>{children}</main>
         <Footer />
         <PopupProvider popups={popups} />
+        <GTMTrackingInit />
       </body>
     </html>
   );
